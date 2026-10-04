@@ -1,16 +1,770 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Momin AI Clean Studio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Momin AI Clean Studio</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#070b12;
+  color:#fff;
+  min-height:100vh;
+}
+
+.container{
+  width:92%;
+  max-width:900px;
+  margin:auto;
+  padding:30px 0 50px;
+}
+
+header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.logo{
+  width:72px;
+  height:72px;
+  margin:auto;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  background:linear-gradient(135deg,#00d9ff,#635bff);
+  box-shadow:0 15px 40px rgba(0,217,255,.18);
+}
+
+h1{
+  margin-top:16px;
+  font-size:30px;
+}
+
+.subtitle{
+  color:#9ca8ba;
+  margin-top:8px;
+  font-size:14px;
+}
+
+.card{
+  background:#101722;
+  border:1px solid #202b3a;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 15px 50px rgba(0,0,0,.25);
+}
+
+.upload{
+  display:block;
+  border:2px dashed #334155;
+  border-radius:18px;
+  padding:42px 20px;
+  text-align:center;
+  cursor:pointer;
+}
+
+.upload:hover{
+  border-color:#00d9ff;
+  background:#0c1622;
+}
+
+.upload-icon{
+  font-size:46px;
+  margin-bottom:12px;
+}
+
+.upload h2{
+  font-size:20px;
+}
+
+.upload p{
+  color:#8995a7;
+  margin-top:8px;
+  font-size:13px;
+}
+
+input[type=file]{
+  display:none;
+}
+
+.preview{
+  display:none;
+  text-align:center;
+}
+
+.preview img{
+  max-width:100%;
+  max-height:420px;
+  border-radius:16px;
+  margin-top:18px;
+  background:#05070a;
+}
+
+.filename{
+  margin-top:12px;
+  color:#cbd5e1;
+  word-break:break-all;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:18px;
+}
+
+.info{
+  background:#0b111b;
+  border:1px solid #202b3a;
+  border-radius:12px;
+  padding:13px;
+}
+
+.info span{
+  display:block;
+  color:#78869a;
+  font-size:11px;
+  margin-bottom:5px;
+}
+
+.info strong{
+  font-size:14px;
+  word-break:break-word;
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:13px 15px;
+  border-radius:12px;
+  background:#0b111b;
+  margin-top:10px;
+}
+
+.status-name{
+  color:#cbd5e1;
+  font-size:14px;
+}
+
+.badge{
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.ok{
+  background:#12351f;
+  color:#62e88a;
+}
+
+.detected{
+  background:#3a1515;
+  color:#ff7777;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  margin-top:18px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg,#00bcd4,#635bff);
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.download{
+  display:none;
+  text-decoration:none;
+  text-align:center;
+  width:100%;
+  margin-top:12px;
+  padding:15px;
+  border-radius:14px;
+  background:#162235;
+  border:1px solid #2b3a50;
+  color:#fff;
+  font-weight:bold;
+}
+
+.message{
+  display:none;
+  margin-top:15px;
+  padding:13px;
+  border-radius:12px;
+  background:#0d2418;
+  color:#6ee7a0;
+  font-size:13px;
+  text-align:center;
+}
+
+.notice{
+  color:#8995a7;
+  font-size:12px;
+  line-height:1.7;
+  text-align:center;
+  margin-top:15px;
+}
+
+footer{
+  text-align:center;
+  color:#586577;
+  font-size:12px;
+  margin-top:25px;
+}
+
+@media(max-width:600px){
+  .container{
+    width:94%;
+    padding-top:20px;
+  }
+
+  h1{
+    font-size:25px;
+  }
+
+  .info-grid{
+    grid-template-columns:1fr;
+  }
+
+  .card{
+    padding:16px;
+  }
+}
+</style>
 </head>
 
-<body style="background:#070b12;color:white;font-family:Arial;text-align:center;padding:50px;">
+<body>
+
+<div class="container">
+
+<header>
+  <div class="logo">🧹</div>
 
   <h1>Momin AI Clean Studio</h1>
 
-  <p>Website is working successfully! ✅</p>
+  <p class="subtitle">
+    Privacy-focused image metadata cleaner & inspector
+  </p>
+</header>
+
+<div class="card">
+
+<label class="upload" for="fileInput">
+
+  <div class="upload-icon">🖼️</div>
+
+  <h2>Choose an Image</h2>
+
+  <p>PNG, JPG, JPEG, WEBP supported</p>
+
+  <p>Processing happens locally in your browser</p>
+
+</label>
+
+<input
+  id="fileInput"
+  type="file"
+  accept="image/png,image/jpeg,image/webp"
+>
+
+<div class="preview" id="previewBox">
+
+  <img id="previewImage" alt="Image Preview">
+
+  <div class="filename" id="fileName"></div>
+
+</div>
+
+</div>
+
+<div class="card" id="analysisCard" style="display:none">
+
+<h2>🔍 Image Analysis</h2>
+
+<div class="info-grid">
+
+<div class="info">
+<span>FILE TYPE</span>
+<strong id="fileType">-</strong>
+</div>
+
+<div class="info">
+<span>FILE SIZE</span>
+<strong id="fileSize">-</strong>
+</div>
+
+<div class="info">
+<span>DIMENSIONS</span>
+<strong id="dimensions">-</strong>
+</div>
+
+<div class="info">
+<span>FORMAT</span>
+<strong id="format">-</strong>
+</div>
+
+</div>
+
+<div style="margin-top:20px">
+
+<div class="status">
+<div class="status-name">EXIF Metadata</div>
+<div class="badge ok" id="exifStatus">Not detected</div>
+</div>
+
+<div class="status">
+<div class="status-name">XMP Metadata</div>
+<div class="badge ok" id="xmpStatus">Not detected</div>
+</div>
+
+<div class="status">
+<div class="status-name">IPTC Metadata</div>
+<div class="badge ok" id="iptcStatus">Not detected</div>
+</div>
+
+<div class="status">
+<div class="status-name">C2PA / JUMBF Marker</div>
+<div class="badge ok" id="c2paStatus">Not detected</div>
+</div>
+
+<div class="status">
+<div class="status-name">AI Disclosure Marker</div>
+<div class="badge ok" id="aiStatus">Not detected</div>
+</div>
+
+</div>
+
+<button id="cleanButton">
+🧹 CLEAN IMAGE
+</button>
+
+<a
+  id="downloadButton"
+  class="download"
+  download
+>
+⬇️ DOWNLOAD CLEAN COPY
+</a>
+
+<div class="message" id="message"></div>
+
+<p class="notice">
+Your image is processed locally in this browser.
+No image is uploaded to a server by this page.
+<br><br>
+This tool creates a fresh rendered image for privacy
+and metadata cleaning. It does not bypass platform
+AI disclosure or provenance systems.
+</p>
+
+</div>
+
+<footer>
+Momin AI Clean Studio • Browser-side processing • Free
+</footer>
+
+</div>
+
+<script>
+
+const fileInput =
+document.getElementById("fileInput");
+
+const previewBox =
+document.getElementById("previewBox");
+
+const previewImage =
+document.getElementById("previewImage");
+
+const fileName =
+document.getElementById("fileName");
+
+const analysisCard =
+document.getElementById("analysisCard");
+
+const fileType =
+document.getElementById("fileType");
+
+const fileSize =
+document.getElementById("fileSize");
+
+const dimensions =
+document.getElementById("dimensions");
+
+const format =
+document.getElementById("format");
+
+const exifStatus =
+document.getElementById("exifStatus");
+
+const xmpStatus =
+document.getElementById("xmpStatus");
+
+const iptcStatus =
+document.getElementById("iptcStatus");
+
+const c2paStatus =
+document.getElementById("c2paStatus");
+
+const aiStatus =
+document.getElementById("aiStatus");
+
+const cleanButton =
+document.getElementById("cleanButton");
+
+const downloadButton =
+document.getElementById("downloadButton");
+
+const message =
+document.getElementById("message");
+
+let currentFile = null;
+let currentImage = null;
+
+function formatBytes(bytes){
+
+  if(bytes === 0){
+    return "0 Bytes";
+  }
+
+  const units = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB"
+  ];
+
+  const i =
+    Math.floor(
+      Math.log(bytes) /
+      Math.log(1024)
+    );
+
+  return (
+    parseFloat(
+      (
+        bytes /
+        Math.pow(1024,i)
+      ).toFixed(2)
+    )
+    + " "
+    + units[i]
+  );
+}
+
+function setBadge(element,detected){
+
+  if(detected){
+
+    element.textContent =
+      "Detected";
+
+    element.className =
+      "badge detected";
+
+  }else{
+
+    element.textContent =
+      "Not detected";
+
+    element.className =
+      "badge ok";
+  }
+}
+
+function scanMetadata(file){
+
+  const reader =
+    new FileReader();
+
+  reader.onload =
+  function(){
+
+    let text = "";
+
+    try{
+
+      text =
+        new TextDecoder(
+          "latin1"
+        ).decode(
+          reader.result
+        );
+
+    }catch(error){
+
+      text = "";
+    }
+
+    const exif =
+      text.includes("Exif") ||
+      text.includes("EXIF");
+
+    const xmp =
+      text.includes("xmpmeta") ||
+      text.includes("XMP") ||
+      text.includes(
+        "http://ns.adobe.com/xap/1.0/"
+      );
+
+    const iptc =
+      text.includes("IPTC") ||
+      text.includes("Photoshop");
+
+    const c2pa =
+      text.includes("c2pa") ||
+      text.includes("C2PA") ||
+      text.includes("jumb") ||
+      text.includes("JUMBF");
+
+    const ai =
+      text.includes("ai-generated") ||
+      text.includes("AI-generated") ||
+      text.includes("AI_GENERATED") ||
+      text.includes("ai_disclosure") ||
+      text.includes(
+        "c2pa.ai-disclosure"
+      );
+
+    setBadge(
+      exifStatus,
+      exif
+    );
+
+    setBadge(
+      xmpStatus,
+      xmp
+    );
+
+    setBadge(
+      iptcStatus,
+      iptc
+    );
+
+    setBadge(
+      c2paStatus,
+      c2pa
+    );
+
+    setBadge(
+      aiStatus,
+      ai
+    );
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
+fileInput.addEventListener(
+"change",
+function(){
+
+  const file =
+    this.files[0];
+
+  if(!file){
+    return;
+  }
+
+  currentFile =
+    file;
+
+  const url =
+    URL.createObjectURL(file);
+
+  previewImage.src =
+    url;
+
+  previewBox.style.display =
+    "block";
+
+  fileName.textContent =
+    file.name;
+
+  analysisCard.style.display =
+    "block";
+
+  fileType.textContent =
+    file.type ||
+    "Unknown";
+
+  fileSize.textContent =
+    formatBytes(
+      file.size
+    );
+
+  format.textContent =
+    file.name
+      .split(".")
+      .pop()
+      .toUpperCase();
+
+  previewImage.onload =
+  function(){
+
+    currentImage =
+      previewImage;
+
+    dimensions.textContent =
+      previewImage.naturalWidth
+      + " × "
+      + previewImage.naturalHeight
+      + " px";
+
+    URL.revokeObjectURL(
+      url
+    );
+  };
+
+  scanMetadata(file);
+
+  downloadButton.style.display =
+    "none";
+
+  message.style.display =
+    "none";
+
+});
+
+cleanButton.addEventListener(
+"click",
+function(){
+
+  if(
+    !currentFile ||
+    !currentImage
+  ){
+    return;
+  }
+
+  cleanButton.disabled =
+    true;
+
+  cleanButton.textContent =
+    "⏳ PROCESSING...";
+
+  setTimeout(
+  function(){
+
+    try{
+
+      const canvas =
+        document.createElement(
+          "canvas"
+        );
+
+      canvas.width =
+        currentImage.naturalWidth;
+
+      canvas.height =
+        currentImage.naturalHeight;
+
+      const ctx =
+        canvas.getContext(
+          "2d"
+        );
+
+      ctx.drawImage(
+        currentImage,
+        0,
+        0
+      );
+
+      canvas.toBlob(
+      function(blob){
+
+        if(!blob){
+
+          throw new Error(
+            "Unable to create image."
+          );
+        }
+
+        const outputUrl =
+          URL.createObjectURL(
+            blob
+          );
+
+        downloadButton.href =
+          outputUrl;
+
+        downloadButton.download =
+          "momin-clean-" +
+          Date.now() +
+          ".png";
+
+        downloadButton.style.display =
+          "block";
+
+        message.innerHTML =
+          "✅ Image processed successfully."
+          + "<br>"
+          + "Original: "
+          + formatBytes(
+              currentFile.size
+            )
+          + " → Clean copy: "
+          + formatBytes(
+              blob.size
+            );
+
+        message.style.display =
+          "block";
+
+        cleanButton.disabled =
+          false;
+
+        cleanButton.textContent =
+          "🧹 CLEAN IMAGE";
+
+      },
+      "image/png",
+      1
+      );
+
+    }catch(error){
+
+      message.textContent =
+        "❌ Processing failed. Please try another image.";
+
+      message.style.display =
+        "block";
+
+      cleanButton.disabled =
+        false;
+
+      cleanButton.textContent =
+        "🧹 CLEAN IMAGE";
+    }
+
+  },
+  300
+  );
+
+});
+
+</script>
 
 </body>
 </html>
