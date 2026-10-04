@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI Clean Studio</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: white;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 600px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      margin-bottom: 30px;
+    }
+
+    .upload-box {
+      padding: 50px 20px;
+      border: 2px dashed #64748b;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .upload-box input {
+      display: none;
+    }
+
+    .upload-box label {
+      cursor: pointer;
+      display: block;
+    }
+
+    .icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .upload-title {
+      font-size: 22px;
+      margin: 10px 0;
+    }
+
+    .upload-text {
+      color: #94a3b8;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: #38bdf8;
+      color: #082f49;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 20px;
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>AI Clean Studio</h1>
+
+    <p class="subtitle">
+      Clean unnecessary image metadata
+    </p>
+
+    <div class="upload-box">
+
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/jpeg,image/png,image/webp"
+      >
+
+      <label for="imageInput">
+
+        <div class="icon">📷</div>
+
+        <div class="upload-title">
+          Upload Image
+        </div>
+
+        <div class="upload-text">
+          JPG, PNG or WEBP
+        </div>
+
+      </label>
+
+    </div>
+
+    <button id="cleanButton" disabled>
+      CLEAN IMAGE
+    </button>
+
+    <div id="status"></div>
+
+  </div>
+
+<script>
+
+const input = document.getElementById("imageInput");
+const button = document.getElementById("cleanButton");
+const status = document.getElementById("status");
+
+input.addEventListener("change", function() {
+
+  if (input.files.length > 0) {
+
+    button.disabled = false;
+
+    status.innerText =
+      "Selected: " + input.files[0].name;
+
+  }
+
+});
+
+button.addEventListener("click", function() {
+
+  status.innerText =
+    "Image selected. Processing system will be added next.";
+
+});
+
+</script>
+
+</body>
+</html>
