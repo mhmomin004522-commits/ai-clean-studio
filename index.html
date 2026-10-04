@@ -1221,4 +1221,565 @@ function displayAnalysis(data){
 
     setStatus(
         document.getElementById("c2paStatus"),
-        data.c2
+        data.c2pa ? "warning" : "good",
+        data.c2pa
+            ? "⚠ Detected"
+            : "✓ Not detected"
+    );
+
+
+    analysisBox.style.display = "block";
+}
+
+
+/* =========================================================
+   SHOW AFTER ANALYSIS
+========================================================= */
+
+function displayAfterAnalysis(data){
+
+    document.getElementById("afterType").textContent =
+        data.format === "JPEG"
+            ? "image/jpeg"
+            : data.format === "PNG"
+                ? "image/png"
+                : data.format === "WEBP"
+                    ? "image/webp"
+                    : "Unknown";
+
+
+    document.getElementById("afterSize").textContent =
+        formatBytes(data.size);
+
+
+    setStatus(
+        document.getElementById("afterExif"),
+        data.exif ? "warning" : "good",
+        data.exif
+            ? "⚠ Detected"
+            : "✓ Not detected"
+    );
+
+
+    setStatus(
+        document.getElementById("afterXmp"),
+        data.xmp ? "warning" : "good",
+        data.xmp
+            ? "⚠ Detected"
+            : "✓ Not detected"
+    );
+
+
+    setStatus(
+        document.getElementById("afterIptc"),
+        data.iptc ? "warning" : "good",
+        data.iptc
+            ? "⚠ Detected"
+            : "✓ Not detected"
+    );
+
+
+    setStatus(
+        document.getElementById("afterC2pa"),
+        data.c2pa ? "warning" : "good",
+        data.c2pa
+            ? "⚠ Detected"
+            : "✓ Not detected"
+    );
+
+
+    afterAnalysisBox.style.display = "block";
+}
+
+
+/* =========================================================
+   LOAD IMAGE
+========================================================= */
+
+async function loadFile(file){
+
+    if(!file){
+
+        return;
+
+    }
+
+
+    const allowed = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+
+    if(!allowed.includes(file.type)){
+
+        showMessage(
+            "❌ Please select a JPG, PNG or WEBP image."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     25 MB browser-side safety limit
+    */
+
+    if(file.size > 25 * 1024 * 1024){
+
+        showMessage(
+            "❌ Image is larger than 25 MB."
+        );
+
+        return;
+
+    }
+
+
+    hideMessage();
+
+    selectedFile = file;
+
+    cleanedBlob = null;
+
+
+    const url =
+        URL.createObjectURL(file);
+
+    previewImage.src = url;
+
+    previewBox.style.display = "block";
+
+
+    fileInfo.textContent =
+        file.name +
+        " · " +
+        formatBytes(file.size);
+
+
+    analysisBox.style.display = "none";
+    resultBox.style.display = "none";
+    afterAnalysisBox.style.display = "none";
+
+
+    cleanButton.disabled = true;
+
+
+    try{
+
+        const analysis =
+            await analyzeFile(file);
+
+        displayAnalysis(analysis);
+
+        cleanButton.disabled = false;
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "❌ Could not analyze this image."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FILE INPUT
+========================================================= */
+
+fileInput.addEventListener(
+    "change",
+    function(){
+
+        if(this.files && this.files[0]){
+
+            loadFile(this.files[0]);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   DRAG & DROP
+========================================================= */
+
+dropArea.addEventListener(
+    "dragover",
+    function(event){
+
+        event.preventDefault();
+
+        dropArea.classList.add("drag");
+
+    }
+);
+
+
+dropArea.addEventListener(
+    "dragleave",
+    function(){
+
+        dropArea.classList.remove("drag");
+
+    }
+);
+
+
+dropArea.addEventListener(
+    "drop",
+    function(event){
+
+        event.preventDefault();
+
+        dropArea.classList.remove("drag");
+
+        const file =
+            event.dataTransfer.files[0];
+
+        if(file){
+
+            loadFile(file);
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CLEAN IMAGE
+========================================================= */
+
+async function cleanImage(){
+
+    if(!selectedFile){
+
+        return;
+
+    }
+
+
+    processing.style.display = "block";
+
+    cleanButton.disabled = true;
+
+    hideMessage();
+
+
+    try{
+
+        /*
+         Browser canvas decoding removes
+         metadata during re-encoding.
+
+         We preserve the original image format
+         where the browser supports it.
+        */
+
+        const img =
+            new Image();
+
+
+        const objectURL =
+            URL.createObjectURL(selectedFile);
+
+
+        await new Promise(
+            (resolve,reject)=>{
+
+                img.onload = resolve;
+
+                img.onerror = reject;
+
+                img.src = objectURL;
+
+            }
+        );
+
+
+        const canvas =
+            document.createElement("canvas");
+
+
+        canvas.width =
+            img.naturalWidth;
+
+        canvas.height =
+            img.naturalHeight;
+
+
+        const ctx =
+            canvas.getContext(
+                "2d",
+                {
+                    alpha:true
+                }
+            );
+
+
+        ctx.drawImage(
+            img,
+            0,
+            0
+        );
+
+
+        URL.revokeObjectURL(objectURL);
+
+
+        /*
+         Preserve format.
+        */
+
+        let outputType =
+            selectedFile.type;
+
+
+        /*
+         Canvas WebP support is not universal.
+         If unsupported, use PNG fallback.
+        */
+
+        const supported =
+            canvas.toDataURL(outputType)
+                .startsWith(
+                    "data:" + outputType
+                );
+
+
+        if(!supported){
+
+            outputType = "image/png";
+
+        }
+
+
+        const quality =
+            outputType === "image/jpeg"
+                ? 0.95
+                : undefined;
+
+
+        cleanedBlob =
+            await new Promise(
+                (resolve,reject)=>{
+
+                    canvas.toBlob(
+                        blob=>{
+
+                            if(blob){
+
+                                resolve(blob);
+
+                            }else{
+
+                                reject(
+                                    new Error(
+                                        "Could not create cleaned image."
+                                    )
+                                );
+
+                            }
+
+                        },
+                        outputType,
+                        quality
+                    );
+
+                }
+            );
+
+
+        /*
+         Clean filename
+        */
+
+        let extension = "png";
+
+        if(outputType === "image/jpeg"){
+
+            extension = "jpg";
+
+        }
+        else if(outputType === "image/webp"){
+
+            extension = "webp";
+
+        }
+
+
+        cleanedFileName =
+            "cleaned-image." +
+            extension;
+
+
+        document.getElementById(
+            "originalSize"
+        ).textContent =
+            formatBytes(selectedFile.size);
+
+
+        document.getElementById(
+            "cleanedSize"
+        ).textContent =
+            formatBytes(cleanedBlob.size);
+
+
+        resultBox.style.display = "block";
+
+
+        /*
+         Analyze cleaned file again.
+        */
+
+        const cleanedFile =
+            new File(
+                [cleanedBlob],
+                cleanedFileName,
+                {
+                    type:outputType
+                }
+            );
+
+
+        const after =
+            await analyzeFile(cleanedFile);
+
+
+        displayAfterAnalysis(after);
+
+
+        showMessage(
+            "✅ Image processed successfully."
+        );
+
+
+        /*
+         Scroll result into view
+        */
+
+        resultBox.scrollIntoView({
+            behavior:"smooth",
+            block:"start"
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "❌ Cleaning failed. Please try another image."
+        );
+
+    }
+
+
+    processing.style.display = "none";
+
+    cleanButton.disabled = false;
+
+}
+
+
+/* =========================================================
+   CLEAN BUTTON
+========================================================= */
+
+cleanButton.addEventListener(
+    "click",
+    cleanImage
+);
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+downloadButton.addEventListener(
+    "click",
+    function(){
+
+        if(!cleanedBlob){
+
+            return;
+
+        }
+
+
+        const url =
+            URL.createObjectURL(cleanedBlob);
+
+
+        const link =
+            document.createElement("a");
+
+
+        link.href = url;
+
+        link.download =
+            cleanedFileName;
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+
+        setTimeout(
+            ()=>URL.revokeObjectURL(url),
+            1000
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CLEAN ANOTHER
+========================================================= */
+
+anotherButton.addEventListener(
+    "click",
+    function(){
+
+        selectedFile = null;
+
+        cleanedBlob = null;
+
+        previewImage.removeAttribute("src");
+
+        previewBox.style.display = "none";
+
+        analysisBox.style.display = "none";
+
+        resultBox.style.display = "none";
+
+        afterAnalysisBox.style.display = "none";
+
+        hideMessage();
+
+        fileInput.value = "";
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }
+);
+
+</script>
+
+</body>
+</html>
