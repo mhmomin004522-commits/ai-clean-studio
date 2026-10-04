@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Momin AI Clean Studio</title>
+
+<meta name="description"
+content="Momin AI Clean Studio — privacy-focused image metadata cleaner and inspector.">
 
 <style>
 *{
@@ -14,241 +18,369 @@
 
 body{
   font-family:Arial,Helvetica,sans-serif;
-  background:#070b12;
+  background:
+    radial-gradient(circle at top,#17213a 0%,#090d16 42%,#05070c 100%);
   color:#fff;
   min-height:100vh;
 }
 
 .container{
-  width:92%;
-  max-width:900px;
+  width:min(960px,94%);
   margin:auto;
-  padding:30px 0 50px;
+  padding:28px 0 45px;
 }
 
-header{
+.header{
   text-align:center;
-  margin-bottom:28px;
+  padding:22px 10px 28px;
 }
 
 .logo{
-  width:72px;
-  height:72px;
+  width:62px;
+  height:62px;
   margin:auto;
   border-radius:20px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:34px;
-  background:linear-gradient(135deg,#00d9ff,#635bff);
-  box-shadow:0 15px 40px rgba(0,217,255,.18);
+  font-size:31px;
+  background:linear-gradient(135deg,#19c8df,#685cff);
+  box-shadow:0 12px 35px rgba(40,150,255,.22);
 }
 
 h1{
-  margin-top:16px;
-  font-size:30px;
+  margin-top:15px;
+  font-size:clamp(28px,6vw,46px);
+  letter-spacing:-1px;
 }
 
 .subtitle{
-  color:#9ca8ba;
+  margin-top:9px;
+  color:#98a4b8;
+  font-size:15px;
+}
+
+.card{
+  background:rgba(16,23,36,.88);
+  border:1px solid #202c40;
+  border-radius:24px;
+  padding:22px;
+  margin-top:18px;
+  box-shadow:0 20px 55px rgba(0,0,0,.22);
+}
+
+.upload{
+  border:1.5px dashed #40506b;
+  border-radius:20px;
+  padding:35px 20px;
+  text-align:center;
+  transition:.25s;
+}
+
+.upload:hover{
+  border-color:#29c8ed;
+  background:rgba(20,40,65,.35);
+}
+
+.upload-icon{
+  font-size:42px;
+  margin-bottom:12px;
+}
+
+.upload-title{
+  font-size:20px;
+  font-weight:700;
+}
+
+.upload-text{
+  color:#8491a6;
   margin-top:8px;
   font-size:14px;
 }
 
-.card{
-  background:#101722;
-  border:1px solid #202b3a;
-  border-radius:22px;
-  padding:22px;
-  margin-bottom:18px;
-  box-shadow:0 15px 50px rgba(0,0,0,.25);
-}
-
-.upload{
-  display:block;
-  border:2px dashed #334155;
-  border-radius:18px;
-  padding:42px 20px;
-  text-align:center;
+.file-button{
+  display:inline-block;
+  margin-top:20px;
+  padding:14px 25px;
+  border-radius:13px;
   cursor:pointer;
-}
-
-.upload:hover{
-  border-color:#00d9ff;
-  background:#0c1622;
-}
-
-.upload-icon{
-  font-size:46px;
-  margin-bottom:12px;
-}
-
-.upload h2{
-  font-size:20px;
-}
-
-.upload p{
-  color:#8995a7;
-  margin-top:8px;
-  font-size:13px;
+  font-weight:700;
+  background:linear-gradient(135deg,#16c4df,#655cff);
+  color:white;
 }
 
 input[type=file]{
   display:none;
 }
 
+.support{
+  margin-top:14px;
+  font-size:12px;
+  color:#68768d;
+}
+
 .preview{
   display:none;
+  margin-top:22px;
   text-align:center;
 }
 
 .preview img{
-  max-width:100%;
-  max-height:420px;
-  border-radius:16px;
-  margin-top:18px;
-  background:#05070a;
+  width:100%;
+  max-height:520px;
+  object-fit:contain;
+  border-radius:18px;
+  background:#070b12;
+  border:1px solid #202c40;
 }
 
 .filename{
-  margin-top:12px;
-  color:#cbd5e1;
+  color:#aeb9c9;
+  margin-top:10px;
+  font-size:13px;
   word-break:break-all;
+}
+
+/* BEFORE AFTER */
+
+.compare-card{
+  display:none;
+}
+
+.compare-title{
+  font-size:21px;
+  font-weight:700;
+  margin-bottom:15px;
+}
+
+.compare{
+  position:relative;
+  width:100%;
+  max-height:620px;
+  overflow:hidden;
+  border-radius:18px;
+  background:#05070c;
+  border:1px solid #26344a;
+  user-select:none;
+}
+
+.compare img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:620px;
+  object-fit:contain;
+}
+
+.after-image{
+  position:absolute;
+  inset:0;
+  width:50%;
+  overflow:hidden;
+  border-right:3px solid white;
+}
+
+.after-image img{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  max-width:none;
+}
+
+.slider{
+  width:100%;
+  margin-top:16px;
+  accent-color:#38c9ed;
+}
+
+.compare-label{
+  position:absolute;
+  top:12px;
+  padding:7px 11px;
+  border-radius:9px;
+  background:rgba(0,0,0,.68);
+  font-size:12px;
+  font-weight:bold;
+  z-index:5;
+}
+
+.label-before{
+  right:12px;
+}
+
+.label-after{
+  left:12px;
 }
 
 .info-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  margin-top:18px;
+  gap:12px;
+  margin-top:20px;
 }
 
 .info{
-  background:#0b111b;
-  border:1px solid #202b3a;
-  border-radius:12px;
-  padding:13px;
+  background:#09101c;
+  border:1px solid #1c283a;
+  border-radius:15px;
+  padding:16px;
 }
 
 .info span{
   display:block;
-  color:#78869a;
-  font-size:11px;
-  margin-bottom:5px;
+  color:#718097;
+  font-size:12px;
+  text-transform:uppercase;
+  margin-bottom:7px;
 }
 
 .info strong{
-  font-size:14px;
-  word-break:break-word;
+  font-size:16px;
+}
+
+.status-list{
+  margin-top:18px;
 }
 
 .status{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
   gap:10px;
-  padding:13px 15px;
-  border-radius:12px;
-  background:#0b111b;
-  margin-top:10px;
-}
-
-.status-name{
-  color:#cbd5e1;
-  font-size:14px;
+  padding:15px;
+  background:#09101c;
+  border-radius:13px;
+  margin-top:8px;
+  border:1px solid #111d2d;
+  color:#b9c3d2;
 }
 
 .badge{
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:11px;
+  padding:7px 11px;
+  border-radius:999px;
+  font-size:12px;
   font-weight:bold;
+  white-space:nowrap;
 }
 
 .ok{
-  background:#12351f;
-  color:#62e88a;
+  background:#073b20;
+  color:#55e68b;
 }
 
 .detected{
-  background:#3a1515;
-  color:#ff7777;
+  background:#48151a;
+  color:#ff747b;
 }
 
 button{
-  width:100%;
   border:0;
-  border-radius:14px;
-  padding:16px;
-  margin-top:18px;
-  font-size:16px;
-  font-weight:bold;
   cursor:pointer;
-  color:#fff;
-  background:linear-gradient(135deg,#00bcd4,#635bff);
+  font-family:inherit;
 }
 
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
+.clean-button{
+  width:100%;
+  margin-top:20px;
+  padding:17px;
+  border-radius:15px;
+  color:#fff;
+  font-size:17px;
+  font-weight:800;
+  background:linear-gradient(100deg,#16c5df,#685cff);
+}
+
+.clean-button:active{
+  transform:scale(.99);
 }
 
 .download{
   display:none;
-  text-decoration:none;
-  text-align:center;
   width:100%;
   margin-top:12px;
-  padding:15px;
+  padding:16px;
+  border-radius:15px;
+  background:#17243a;
+  border:1px solid #2b3b55;
+  color:white;
+  font-size:16px;
+  font-weight:700;
+  text-decoration:none;
+  text-align:center;
+}
+
+.new-image{
+  display:none;
+  width:100%;
+  margin-top:12px;
+  padding:14px;
   border-radius:14px;
-  background:#162235;
-  border:1px solid #2b3a50;
-  color:#fff;
-  font-weight:bold;
+  background:#101a2a;
+  border:1px solid #293951;
+  color:#b9c7da;
+  font-weight:700;
 }
 
 .message{
   display:none;
-  margin-top:15px;
-  padding:13px;
-  border-radius:12px;
-  background:#0d2418;
-  color:#6ee7a0;
-  font-size:13px;
+  margin-top:16px;
+  padding:16px;
   text-align:center;
+  border-radius:14px;
+  background:#07351e;
+  color:#5ee994;
+  line-height:1.6;
 }
 
 .notice{
-  color:#8995a7;
-  font-size:12px;
-  line-height:1.7;
-  text-align:center;
-  margin-top:15px;
+  margin-top:18px;
+  padding:15px;
+  border-radius:14px;
+  background:#111a28;
+  border:1px solid #24334a;
+  color:#8491a5;
+  font-size:13px;
+  line-height:1.6;
 }
 
 footer{
   text-align:center;
-  color:#586577;
+  color:#5f6c80;
   font-size:12px;
-  margin-top:25px;
+  padding:25px 10px 5px;
+}
+
+.hidden{
+  display:none!important;
 }
 
 @media(max-width:600px){
+
   .container{
     width:94%;
-    padding-top:20px;
+    padding-top:14px;
   }
 
-  h1{
-    font-size:25px;
+  .card{
+    padding:16px;
+    border-radius:20px;
   }
 
   .info-grid{
     grid-template-columns:1fr;
   }
 
-  .card{
-    padding:16px;
+  .status{
+    padding:13px;
+  }
+
+  .status span:first-child{
+    font-size:14px;
+  }
+
+  .compare{
+    max-height:480px;
   }
 }
 </style>
@@ -258,195 +390,244 @@ footer{
 
 <div class="container">
 
-<header>
-  <div class="logo">🧹</div>
+  <header class="header">
+    <div class="logo">🧹</div>
 
-  <h1>Momin AI Clean Studio</h1>
+    <h1>Momin AI Clean Studio</h1>
 
-  <p class="subtitle">
-    Privacy-focused image metadata cleaner & inspector
-  </p>
-</header>
+    <p class="subtitle">
+      Privacy-focused image metadata cleaner & inspector
+    </p>
+  </header>
 
-<div class="card">
 
-<label class="upload" for="fileInput">
+  <!-- UPLOAD -->
 
-  <div class="upload-icon">🖼️</div>
+  <section class="card">
 
-  <h2>Choose an Image</h2>
+    <div class="upload">
 
-  <p>PNG, JPG, JPEG, WEBP supported</p>
+      <div class="upload-icon">🖼️</div>
 
-  <p>Processing happens locally in your browser</p>
+      <div class="upload-title">
+        Choose an Image
+      </div>
 
-</label>
+      <div class="upload-text">
+        Select an image from your device
+      </div>
 
-<input
-  id="fileInput"
-  type="file"
-  accept="image/png,image/jpeg,image/webp"
->
+      <label class="file-button" for="fileInput">
+        📁 Choose Image
+      </label>
 
-<div class="preview" id="previewBox">
+      <input
+        id="fileInput"
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+      >
 
-  <img id="previewImage" alt="Image Preview">
+      <div class="support">
+        PNG, JPG, JPEG, WEBP supported
+      </div>
 
-  <div class="filename" id="fileName"></div>
+    </div>
+
+    <div class="preview" id="previewBox">
+
+      <img id="previewImage" alt="Image preview">
+
+      <div class="filename" id="fileName"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ANALYSIS -->
+
+  <section class="card" id="analysisCard" style="display:none;">
+
+    <h2>🔍 Image Analysis</h2>
+
+    <div class="info-grid">
+
+      <div class="info">
+        <span>File Type</span>
+        <strong id="fileType">—</strong>
+      </div>
+
+      <div class="info">
+        <span>File Size</span>
+        <strong id="fileSize">—</strong>
+      </div>
+
+      <div class="info">
+        <span>Dimensions</span>
+        <strong id="dimensions">—</strong>
+      </div>
+
+      <div class="info">
+        <span>Format</span>
+        <strong id="format">—</strong>
+      </div>
+
+    </div>
+
+
+    <div class="status-list">
+
+      <div class="status">
+        <span>EXIF Metadata</span>
+        <span class="badge ok" id="exifStatus">Not detected</span>
+      </div>
+
+      <div class="status">
+        <span>XMP Metadata</span>
+        <span class="badge ok" id="xmpStatus">Not detected</span>
+      </div>
+
+      <div class="status">
+        <span>IPTC Metadata</span>
+        <span class="badge ok" id="iptcStatus">Not detected</span>
+      </div>
+
+      <div class="status">
+        <span>C2PA / JUMBF Marker</span>
+        <span class="badge ok" id="c2paStatus">Not detected</span>
+      </div>
+
+      <div class="status">
+        <span>AI Disclosure Marker</span>
+        <span class="badge ok" id="aiStatus">Not detected</span>
+      </div>
+
+    </div>
+
+
+    <button class="clean-button" id="cleanButton">
+      🧹 CLEAN IMAGE
+    </button>
+
+    <a
+      class="download"
+      id="downloadButton"
+      download="momin-clean-image.png"
+    >
+      ⬇️ DOWNLOAD CLEAN COPY
+    </a>
+
+    <button class="new-image" id="newImageButton">
+      🔄 CLEAN ANOTHER IMAGE
+    </button>
+
+    <div class="message" id="message"></div>
+
+    <div class="notice">
+      🔒 Your image is processed locally in this browser.
+      This page does not upload your image to a server.
+
+      <br><br>
+
+      This tool creates a fresh rendered image for privacy
+      and metadata cleaning. It does not guarantee removal
+      of platform-specific provenance or disclosure systems.
+    </div>
+
+  </section>
+
+
+  <!-- BEFORE / AFTER -->
+
+  <section class="card compare-card" id="compareCard">
+
+    <div class="compare-title">
+      🌓 Before / After Comparison
+    </div>
+
+    <div class="compare" id="compareBox">
+
+      <img id="beforeImage" alt="Original image">
+
+      <div class="after-image" id="afterLayer">
+
+        <img id="afterImage" alt="Clean image">
+
+      </div>
+
+      <div class="compare-label label-after">
+        CLEAN
+      </div>
+
+      <div class="compare-label label-before">
+        ORIGINAL
+      </div>
+
+    </div>
+
+    <input
+      class="slider"
+      id="compareSlider"
+      type="range"
+      min="0"
+      max="100"
+      value="50"
+    >
+
+  </section>
+
+
+  <footer>
+    Momin AI Clean Studio • Browser-side processing • Free
+  </footer>
 
 </div>
 
-</div>
-
-<div class="card" id="analysisCard" style="display:none">
-
-<h2>🔍 Image Analysis</h2>
-
-<div class="info-grid">
-
-<div class="info">
-<span>FILE TYPE</span>
-<strong id="fileType">-</strong>
-</div>
-
-<div class="info">
-<span>FILE SIZE</span>
-<strong id="fileSize">-</strong>
-</div>
-
-<div class="info">
-<span>DIMENSIONS</span>
-<strong id="dimensions">-</strong>
-</div>
-
-<div class="info">
-<span>FORMAT</span>
-<strong id="format">-</strong>
-</div>
-
-</div>
-
-<div style="margin-top:20px">
-
-<div class="status">
-<div class="status-name">EXIF Metadata</div>
-<div class="badge ok" id="exifStatus">Not detected</div>
-</div>
-
-<div class="status">
-<div class="status-name">XMP Metadata</div>
-<div class="badge ok" id="xmpStatus">Not detected</div>
-</div>
-
-<div class="status">
-<div class="status-name">IPTC Metadata</div>
-<div class="badge ok" id="iptcStatus">Not detected</div>
-</div>
-
-<div class="status">
-<div class="status-name">C2PA / JUMBF Marker</div>
-<div class="badge ok" id="c2paStatus">Not detected</div>
-</div>
-
-<div class="status">
-<div class="status-name">AI Disclosure Marker</div>
-<div class="badge ok" id="aiStatus">Not detected</div>
-</div>
-
-</div>
-
-<button id="cleanButton">
-🧹 CLEAN IMAGE
-</button>
-
-<a
-  id="downloadButton"
-  class="download"
-  download
->
-⬇️ DOWNLOAD CLEAN COPY
-</a>
-
-<div class="message" id="message"></div>
-
-<p class="notice">
-Your image is processed locally in this browser.
-No image is uploaded to a server by this page.
-<br><br>
-This tool creates a fresh rendered image for privacy
-and metadata cleaning. It does not bypass platform
-AI disclosure or provenance systems.
-</p>
-
-</div>
-
-<footer>
-Momin AI Clean Studio • Browser-side processing • Free
-</footer>
-
-</div>
 
 <script>
 
-const fileInput =
-document.getElementById("fileInput");
+const fileInput = document.getElementById("fileInput");
 
-const previewBox =
-document.getElementById("previewBox");
+const previewBox = document.getElementById("previewBox");
+const previewImage = document.getElementById("previewImage");
+const fileName = document.getElementById("fileName");
 
-const previewImage =
-document.getElementById("previewImage");
+const analysisCard = document.getElementById("analysisCard");
 
-const fileName =
-document.getElementById("fileName");
+const fileType = document.getElementById("fileType");
+const fileSize = document.getElementById("fileSize");
+const dimensions = document.getElementById("dimensions");
+const format = document.getElementById("format");
 
-const analysisCard =
-document.getElementById("analysisCard");
+const exifStatus = document.getElementById("exifStatus");
+const xmpStatus = document.getElementById("xmpStatus");
+const iptcStatus = document.getElementById("iptcStatus");
+const c2paStatus = document.getElementById("c2paStatus");
+const aiStatus = document.getElementById("aiStatus");
 
-const fileType =
-document.getElementById("fileType");
+const cleanButton = document.getElementById("cleanButton");
+const downloadButton = document.getElementById("downloadButton");
+const newImageButton = document.getElementById("newImageButton");
 
-const fileSize =
-document.getElementById("fileSize");
+const message = document.getElementById("message");
 
-const dimensions =
-document.getElementById("dimensions");
+const compareCard = document.getElementById("compareCard");
+const beforeImage = document.getElementById("beforeImage");
+const afterImage = document.getElementById("afterImage");
+const afterLayer = document.getElementById("afterLayer");
+const compareSlider = document.getElementById("compareSlider");
 
-const format =
-document.getElementById("format");
-
-const exifStatus =
-document.getElementById("exifStatus");
-
-const xmpStatus =
-document.getElementById("xmpStatus");
-
-const iptcStatus =
-document.getElementById("iptcStatus");
-
-const c2paStatus =
-document.getElementById("c2paStatus");
-
-const aiStatus =
-document.getElementById("aiStatus");
-
-const cleanButton =
-document.getElementById("cleanButton");
-
-const downloadButton =
-document.getElementById("downloadButton");
-
-const message =
-document.getElementById("message");
 
 let currentFile = null;
-let currentImage = null;
+let originalObjectURL = null;
+let cleanObjectURL = null;
+let originalSize = 0;
+let cleanSize = 0;
+
 
 function formatBytes(bytes){
 
-  if(bytes === 0){
-    return "0 Bytes";
-  }
+  if(bytes === 0) return "0 Bytes";
 
   const units = [
     "Bytes",
@@ -463,274 +644,374 @@ function formatBytes(bytes){
 
   return (
     parseFloat(
-      (
-        bytes /
-        Math.pow(1024,i)
-      ).toFixed(2)
+      (bytes / Math.pow(1024,i))
+      .toFixed(2)
     )
     + " "
     + units[i]
   );
 }
 
-function setBadge(element,detected){
 
-  if(detected){
+function setBadge(element, detected){
 
-    element.textContent =
-      "Detected";
+  element.textContent =
+    detected
+    ? "Detected"
+    : "Not detected";
 
-    element.className =
-      "badge detected";
-
-  }else{
-
-    element.textContent =
-      "Not detected";
-
-    element.className =
-      "badge ok";
-  }
+  element.className =
+    "badge " +
+    (detected ? "detected" : "ok");
 }
+
 
 function scanMetadata(file){
 
-  const reader =
-    new FileReader();
+  return new Promise(resolve => {
 
-  reader.onload =
-  function(){
+    const reader = new FileReader();
 
-    let text = "";
+    reader.onload = function(){
 
-    try{
+      try{
 
-      text =
-        new TextDecoder(
-          "latin1"
-        ).decode(
-          reader.result
-        );
+        const bytes =
+          new Uint8Array(reader.result);
 
-    }catch(error){
+        const text =
+          new TextDecoder(
+            "latin1"
+          ).decode(bytes);
 
-      text = "";
-    }
+        const upper =
+          text.toUpperCase();
 
-    const exif =
-      text.includes("Exif") ||
-      text.includes("EXIF");
+        const result = {
 
-    const xmp =
-      text.includes("xmpmeta") ||
-      text.includes("XMP") ||
-      text.includes(
-        "http://ns.adobe.com/xap/1.0/"
-      );
+          exif:
+            upper.includes("EXIF"),
 
-    const iptc =
-      text.includes("IPTC") ||
-      text.includes("Photoshop");
+          xmp:
+            upper.includes("XMP"),
 
-    const c2pa =
-      text.includes("c2pa") ||
-      text.includes("C2PA") ||
-      text.includes("jumb") ||
-      text.includes("JUMBF");
+          iptc:
+            upper.includes("IPTC"),
 
-    const ai =
-      text.includes("ai-generated") ||
-      text.includes("AI-generated") ||
-      text.includes("AI_GENERATED") ||
-      text.includes("ai_disclosure") ||
-      text.includes(
-        "c2pa.ai-disclosure"
-      );
+          c2pa:
+            upper.includes("C2PA") ||
+            upper.includes("JUMBF"),
 
-    setBadge(
-      exifStatus,
-      exif
-    );
+          ai:
+            upper.includes("AI DISCLOSURE") ||
+            upper.includes("AIGENERATED") ||
+            upper.includes("AI_GENERATED") ||
+            upper.includes("GENERATIVE AI")
 
-    setBadge(
-      xmpStatus,
-      xmp
-    );
+        };
 
-    setBadge(
-      iptcStatus,
-      iptc
-    );
+        resolve(result);
 
-    setBadge(
-      c2paStatus,
-      c2pa
-    );
+      }catch(error){
 
-    setBadge(
-      aiStatus,
-      ai
-    );
-  };
+        resolve({
+          exif:false,
+          xmp:false,
+          iptc:false,
+          c2pa:false,
+          ai:false
+        });
 
-  reader.readAsArrayBuffer(file);
+      }
+
+    };
+
+    reader.onerror = () => {
+
+      resolve({
+        exif:false,
+        xmp:false,
+        iptc:false,
+        c2pa:false,
+        ai:false
+      });
+
+    };
+
+    reader.readAsArrayBuffer(file);
+
+  });
+
 }
 
+
 fileInput.addEventListener(
-"change",
-function(){
+  "change",
+  async function(){
 
-  const file =
-    this.files[0];
+    const file =
+      this.files[0];
 
-  if(!file){
-    return;
-  }
+    if(!file) return;
 
-  currentFile =
-    file;
 
-  const url =
-    URL.createObjectURL(file);
+    currentFile = file;
+    originalSize = file.size;
 
-  previewImage.src =
-    url;
 
-  previewBox.style.display =
-    "block";
+    if(originalObjectURL){
 
-  fileName.textContent =
-    file.name;
+      URL.revokeObjectURL(
+        originalObjectURL
+      );
 
-  analysisCard.style.display =
-    "block";
+    }
 
-  fileType.textContent =
-    file.type ||
-    "Unknown";
+    originalObjectURL =
+      URL.createObjectURL(file);
 
-  fileSize.textContent =
-    formatBytes(
-      file.size
-    );
 
-  format.textContent =
-    file.name
-      .split(".")
+    previewImage.src =
+      originalObjectURL;
+
+    beforeImage.src =
+      originalObjectURL;
+
+
+    previewBox.style.display =
+      "block";
+
+    analysisCard.style.display =
+      "block";
+
+    compareCard.style.display =
+      "none";
+
+    downloadButton.style.display =
+      "none";
+
+    newImageButton.style.display =
+      "none";
+
+    message.style.display =
+      "none";
+
+
+    fileName.textContent =
+      file.name;
+
+    fileType.textContent =
+      file.type || "Unknown";
+
+    fileSize.textContent =
+      formatBytes(file.size);
+
+    format.textContent =
+      (
+        file.type || ""
+      )
+      .split("/")
       .pop()
       .toUpperCase();
 
-  previewImage.onload =
-  function(){
 
-    currentImage =
-      previewImage;
+    const image =
+      new Image();
 
-    dimensions.textContent =
-      previewImage.naturalWidth
-      + " × "
-      + previewImage.naturalHeight
-      + " px";
+    image.onload =
+      async function(){
 
-    URL.revokeObjectURL(
-      url
-    );
-  };
+        dimensions.textContent =
+          `${image.naturalWidth} × ${image.naturalHeight} px`;
 
-  scanMetadata(file);
+        const result =
+          await scanMetadata(file);
 
-  downloadButton.style.display =
-    "none";
+        setBadge(
+          exifStatus,
+          result.exif
+        );
 
-  message.style.display =
-    "none";
+        setBadge(
+          xmpStatus,
+          result.xmp
+        );
 
-});
+        setBadge(
+          iptcStatus,
+          result.iptc
+        );
+
+        setBadge(
+          c2paStatus,
+          result.c2pa
+        );
+
+        setBadge(
+          aiStatus,
+          result.ai
+        );
+
+      };
+
+    image.src =
+      originalObjectURL;
+
+  }
+);
+
 
 cleanButton.addEventListener(
-"click",
-function(){
-
-  if(
-    !currentFile ||
-    !currentImage
-  ){
-    return;
-  }
-
-  cleanButton.disabled =
-    true;
-
-  cleanButton.textContent =
-    "⏳ PROCESSING...";
-
-  setTimeout(
+  "click",
   function(){
 
-    try{
+    if(!currentFile) return;
 
-      const canvas =
-        document.createElement(
-          "canvas"
-        );
 
-      canvas.width =
-        currentImage.naturalWidth;
+    cleanButton.disabled =
+      true;
 
-      canvas.height =
-        currentImage.naturalHeight;
+    cleanButton.textContent =
+      "⏳ PROCESSING...";
 
-      const ctx =
-        canvas.getContext(
-          "2d"
-        );
 
-      ctx.drawImage(
-        currentImage,
-        0,
-        0
-      );
+    const image =
+      new Image();
 
-      canvas.toBlob(
-      function(blob){
+    image.onload =
+      function(){
 
-        if(!blob){
-
-          throw new Error(
-            "Unable to create image."
-          );
-        }
-
-        const outputUrl =
-          URL.createObjectURL(
-            blob
+        const canvas =
+          document.createElement(
+            "canvas"
           );
 
-        downloadButton.href =
-          outputUrl;
+        canvas.width =
+          image.naturalWidth;
 
-        downloadButton.download =
-          "momin-clean-" +
-          Date.now() +
-          ".png";
+        canvas.height =
+          image.naturalHeight;
 
-        downloadButton.style.display =
-          "block";
 
-        message.innerHTML =
-          "✅ Image processed successfully."
-          + "<br>"
-          + "Original: "
-          + formatBytes(
-              currentFile.size
-            )
-          + " → Clean copy: "
-          + formatBytes(
-              blob.size
-            );
+        const ctx =
+          canvas.getContext("2d", {
+            alpha:true
+          });
 
-        message.style.display =
-          "block";
+
+        ctx.drawImage(
+          image,
+          0,
+          0
+        );
+
+
+        canvas.toBlob(
+          function(blob){
+
+            if(!blob){
+
+              cleanButton.disabled =
+                false;
+
+              cleanButton.textContent =
+                "🧹 CLEAN IMAGE";
+
+              message.style.display =
+                "block";
+
+              message.style.background =
+                "#4a161b";
+
+              message.style.color =
+                "#ff858b";
+
+              message.textContent =
+                "❌ Processing failed.";
+
+              return;
+
+            }
+
+
+            cleanSize =
+              blob.size;
+
+
+            if(cleanObjectURL){
+
+              URL.revokeObjectURL(
+                cleanObjectURL
+              );
+
+            }
+
+
+            cleanObjectURL =
+              URL.createObjectURL(blob);
+
+
+            afterImage.src =
+              cleanObjectURL;
+
+
+            downloadButton.href =
+              cleanObjectURL;
+
+
+            downloadButton.download =
+              "momin-clean-image.png";
+
+
+            downloadButton.style.display =
+              "block";
+
+            newImageButton.style.display =
+              "block";
+
+
+            compareCard.style.display =
+              "block";
+
+
+            message.style.display =
+              "block";
+
+            message.style.background =
+              "#07351e";
+
+            message.style.color =
+              "#5ee994";
+
+
+            message.innerHTML =
+              `✅ Image processed successfully.<br>
+              Original: ${formatBytes(originalSize)}
+              → Clean copy: ${formatBytes(cleanSize)}`;
+
+
+            cleanButton.disabled =
+              false;
+
+            cleanButton.textContent =
+              "🧹 CLEAN IMAGE";
+
+
+            compareCard.scrollIntoView({
+              behavior:"smooth",
+              block:"start"
+            });
+
+          },
+          "image/png",
+          1
+        );
+
+      };
+
+
+    image.onerror =
+      function(){
 
         cleanButton.disabled =
           false;
@@ -738,31 +1019,78 @@ function(){
         cleanButton.textContent =
           "🧹 CLEAN IMAGE";
 
-      },
-      "image/png",
-      1
-      );
+        message.style.display =
+          "block";
 
-    }catch(error){
+        message.textContent =
+          "❌ Unable to process this image.";
 
-      message.textContent =
-        "❌ Processing failed. Please try another image.";
+      };
 
-      message.style.display =
-        "block";
 
-      cleanButton.disabled =
-        false;
+    image.src =
+      originalObjectURL;
 
-      cleanButton.textContent =
-        "🧹 CLEAN IMAGE";
-    }
+  }
+);
 
-  },
-  300
-  );
 
-});
+/* BEFORE / AFTER SLIDER */
+
+compareSlider.addEventListener(
+  "input",
+  function(){
+
+    const value =
+      this.value;
+
+    afterLayer.style.width =
+      value + "%";
+
+    afterImage.style.width =
+      (
+        10000 / value
+      ) + "%";
+
+  }
+);
+
+
+/* NEW IMAGE */
+
+newImageButton.addEventListener(
+  "click",
+  function(){
+
+    fileInput.value = "";
+
+    currentFile = null;
+
+    previewBox.style.display =
+      "none";
+
+    analysisCard.style.display =
+      "none";
+
+    compareCard.style.display =
+      "none";
+
+    downloadButton.style.display =
+      "none";
+
+    newImageButton.style.display =
+      "none";
+
+    message.style.display =
+      "none";
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  }
+);
 
 </script>
 
