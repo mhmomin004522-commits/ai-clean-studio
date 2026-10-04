@@ -21,26 +21,31 @@ body {
 
 .container {
   width: 92%;
-  max-width: 600px;
+  max-width: 620px;
   margin: auto;
-  padding: 45px 0;
+  padding: 35px 0 50px;
+}
+
+header {
   text-align: center;
+  margin-bottom: 28px;
 }
 
 h1 {
   font-size: 38px;
-  margin: 10px 0;
+  margin: 5px 0 10px;
 }
 
 .subtitle {
   color: #cbd5e1;
-  margin-bottom: 30px;
+  margin: 0;
 }
 
 .upload-box {
   border: 2px dashed #64748b;
   border-radius: 22px;
-  padding: 45px 20px;
+  padding: 42px 20px;
+  text-align: center;
   background: rgba(255,255,255,0.06);
   cursor: pointer;
 }
@@ -54,12 +59,12 @@ h1 {
 }
 
 .camera {
-  font-size: 60px;
+  font-size: 58px;
 }
 
 .upload-title {
   font-size: 23px;
-  margin-top: 15px;
+  margin-top: 12px;
 }
 
 .upload-info {
@@ -70,11 +75,48 @@ h1 {
 #preview {
   display: none;
   width: 100%;
-  max-height: 400px;
+  max-height: 430px;
   object-fit: contain;
-  margin-top: 25px;
-  border-radius: 16px;
+  margin-top: 22px;
+  border-radius: 17px;
   background: #020617;
+}
+
+.panel {
+  display: none;
+  margin-top: 22px;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.07);
+}
+
+.panel h2 {
+  font-size: 19px;
+  margin-top: 0;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.meta-row:last-child {
+  border-bottom: none;
+}
+
+.found {
+  color: #facc15;
+}
+
+.clean {
+  color: #4ade80;
+}
+
+.unknown {
+  color: #94a3b8;
 }
 
 button,
@@ -87,16 +129,19 @@ button,
   border-radius: 13px;
   font-size: 16px;
   font-weight: bold;
+  text-align: center;
   text-decoration: none;
 }
 
 #cleanButton {
   background: #38bdf8;
   color: #082f49;
+  cursor: pointer;
 }
 
 #cleanButton:disabled {
   opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .download {
@@ -107,17 +152,34 @@ button,
 
 #status {
   margin-top: 20px;
+  text-align: center;
   color: #cbd5e1;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-.info {
-  margin-top: 35px;
-  padding: 18px;
+.note {
+  margin-top: 25px;
+  padding: 17px;
   border-radius: 15px;
   background: rgba(255,255,255,0.05);
   color: #94a3b8;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.reset {
+  display: none;
+  background: #334155;
+  color: white;
+  cursor: pointer;
+}
+
+.small {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 12px;
+  text-align: center;
 }
 </style>
 </head>
@@ -126,49 +188,132 @@ button,
 
 <div class="container">
 
+<header>
   <h1>AI Clean Studio</h1>
 
   <p class="subtitle">
-    Clean unnecessary image metadata
+    Image Metadata & Privacy Cleaner
   </p>
+</header>
 
-  <div class="upload-box"
-       onclick="document.getElementById('imageInput').click()">
 
-    <input
-      type="file"
-      id="imageInput"
-      accept="image/jpeg,image/png,image/webp">
+<!-- UPLOAD -->
 
-    <div class="camera">📷</div>
+<div
+  class="upload-box"
+  onclick="document.getElementById('imageInput').click()">
 
-    <div class="upload-title">
-      Upload Image
-    </div>
+  <input
+    type="file"
+    id="imageInput"
+    accept="image/jpeg,image/png,image/webp">
 
-    <div class="upload-info">
-      JPG, PNG or WEBP
-    </div>
+  <div class="camera">📷</div>
 
+  <div class="upload-title">
+    Upload Image
   </div>
 
-  <img id="preview" alt="Image preview">
-
-  <button id="cleanButton" disabled>
-    CLEAN IMAGE
-  </button>
-
-  <div id="status"></div>
-
-  <a id="downloadButton"
-     class="download">
-     ⬇ DOWNLOAD CLEAN IMAGE
-  </a>
-
-  <div class="info">
-    🔒 Your image is processed locally in your browser.
-    It is not uploaded to our server.
+  <div class="upload-info">
+    JPG, PNG or WEBP
   </div>
+
+</div>
+
+
+<!-- PREVIEW -->
+
+<img
+  id="preview"
+  alt="Image preview">
+
+
+<!-- ANALYZER -->
+
+<div
+  class="panel"
+  id="analyzer">
+
+  <h2>🔍 Image Analysis</h2>
+
+  <div class="meta-row">
+    <span>File Type</span>
+    <strong id="fileType">—</strong>
+  </div>
+
+  <div class="meta-row">
+    <span>File Size</span>
+    <strong id="fileSize">—</strong>
+  </div>
+
+  <div class="meta-row">
+    <span>EXIF</span>
+    <strong id="exifStatus">—</strong>
+  </div>
+
+  <div class="meta-row">
+    <span>XMP</span>
+    <strong id="xmpStatus">—</strong>
+  </div>
+
+  <div class="meta-row">
+    <span>IPTC</span>
+    <strong id="iptcStatus">—</strong>
+  </div>
+
+  <div class="meta-row">
+    <span>C2PA / JUMBF</span>
+    <strong id="c2paStatus">—</strong>
+  </div>
+
+  <div class="small">
+    Detection results are browser-side indicators,
+    not forensic certification.
+  </div>
+
+</div>
+
+
+<!-- CLEAN -->
+
+<button
+  id="cleanButton"
+  disabled>
+
+  🧹 CLEAN IMAGE
+
+</button>
+
+
+<div id="status"></div>
+
+
+<!-- DOWNLOAD -->
+
+<a
+  id="downloadButton"
+  class="download">
+
+  ⬇ DOWNLOAD CLEAN IMAGE
+
+</a>
+
+
+<!-- RESET -->
+
+<button
+  id="resetButton"
+  class="reset">
+
+  ↻ CLEAN ANOTHER IMAGE
+
+</button>
+
+
+<div class="note">
+  🔒 <b>Privacy:</b> Your image is processed locally
+  in your browser. The image is not uploaded to our server.
+</div>
 
 </div>
 
@@ -178,195 +323,557 @@ button,
 const imageInput =
   document.getElementById("imageInput");
 
-const cleanButton =
-  document.getElementById("cleanButton");
-
 const preview =
   document.getElementById("preview");
 
-const status =
-  document.getElementById("status");
+const analyzer =
+  document.getElementById("analyzer");
+
+const cleanButton =
+  document.getElementById("cleanButton");
 
 const downloadButton =
   document.getElementById("downloadButton");
 
+const resetButton =
+  document.getElementById("resetButton");
+
+const status =
+  document.getElementById("status");
+
+const fileType =
+  document.getElementById("fileType");
+
+const fileSize =
+  document.getElementById("fileSize");
+
+const exifStatus =
+  document.getElementById("exifStatus");
+
+const xmpStatus =
+  document.getElementById("xmpStatus");
+
+const iptcStatus =
+  document.getElementById("iptcStatus");
+
+const c2paStatus =
+  document.getElementById("c2paStatus");
+
 
 let selectedImage = null;
+let previewURL = null;
+let downloadURL = null;
 
 
-/* IMAGE SELECT */
+/* =========================
+   IMAGE SELECT
+========================= */
 
-imageInput.addEventListener("change", function() {
+imageInput.addEventListener(
+  "change",
+  async function() {
 
-  if (!this.files || !this.files[0]) {
-    return;
-  }
-
-  selectedImage = this.files[0];
-
-  const imageURL =
-    URL.createObjectURL(selectedImage);
-
-  preview.src = imageURL;
-
-  preview.style.display = "block";
-
-  cleanButton.disabled = false;
-
-  status.innerHTML =
-    "Selected: <b>" +
-    escapeHTML(selectedImage.name) +
-    "</b><br>" +
-    "Size: " +
-    formatBytes(selectedImage.size);
-
-  downloadButton.style.display = "none";
-
-});
-
-
-/* CLEAN IMAGE */
-
-cleanButton.addEventListener("click", function() {
-
-  if (!selectedImage) {
-    return;
-  }
-
-  cleanButton.disabled = true;
-
-  status.innerHTML =
-    "⏳ Processing image...";
-
-
-  const img = new Image();
-
-  const imageURL =
-    URL.createObjectURL(selectedImage);
-
-
-  img.onload = function() {
-
-    try {
-
-      /*
-       * Create a new canvas.
-       * Drawing pixels to a fresh canvas and
-       * exporting it creates a new image file
-       * rather than copying the original
-       * EXIF/metadata blocks.
-       */
-
-      const canvas =
-        document.createElement("canvas");
-
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-
-
-      const ctx =
-        canvas.getContext("2d");
-
-      ctx.drawImage(
-        img,
-        0,
-        0
-      );
-
-
-      /*
-       * Export as JPEG.
-       * The new file does not carry the original
-       * browser-readable EXIF metadata.
-       */
-
-      canvas.toBlob(
-        function(blob) {
-
-          if (!blob) {
-
-            throw new Error(
-              "Could not create cleaned image."
-            );
-
-          }
-
-
-          const downloadURL =
-            URL.createObjectURL(blob);
-
-
-          downloadButton.href =
-            downloadURL;
-
-          downloadButton.download =
-            "cleaned-image.jpg";
-
-
-          downloadButton.style.display =
-            "block";
-
-
-          status.innerHTML =
-            "✅ Image processed successfully." +
-            "<br><br>" +
-            "Original: " +
-            formatBytes(selectedImage.size) +
-            "<br>" +
-            "Cleaned: " +
-            formatBytes(blob.size);
-
-
-          cleanButton.disabled = false;
-
-
-          URL.revokeObjectURL(imageURL);
-
-        },
-
-        "image/jpeg",
-
-        0.95
-
-      );
-
+    if (!this.files || !this.files[0]) {
+      return;
     }
 
-    catch (error) {
+    selectedImage = this.files[0];
 
-      status.innerText =
-        "❌ Processing failed: " +
-        error.message;
+    cleanButton.disabled = true;
 
-      cleanButton.disabled = false;
+    downloadButton.style.display = "none";
 
+    resetButton.style.display = "none";
+
+    analyzer.style.display = "block";
+
+
+    if (previewURL) {
+      URL.revokeObjectURL(previewURL);
     }
 
-  };
+
+    previewURL =
+      URL.createObjectURL(selectedImage);
+
+    preview.src = previewURL;
+
+    preview.style.display = "block";
 
 
-  img.onerror = function() {
+    fileType.innerText =
+      selectedImage.type || "Unknown";
+
+    fileSize.innerText =
+      formatBytes(selectedImage.size);
+
 
     status.innerText =
-      "❌ Unable to read this image.";
+      "🔎 Scanning image...";
+
+
+    await analyzeImage(selectedImage);
+
 
     cleanButton.disabled = false;
 
-  };
+    status.innerText =
+      "Image ready. You can clean it.";
+
+  }
+);
 
 
-  img.src = imageURL;
+/* =========================
+   ANALYZE IMAGE
+========================= */
 
-});
+async function analyzeImage(file) {
+
+  try {
+
+    const buffer =
+      await file.arrayBuffer();
 
 
-/* FILE SIZE */
+    const bytes =
+      new Uint8Array(buffer);
+
+
+    /*
+     * Convert bytes into a Latin-1 style
+     * string so common embedded text markers
+     * can be searched without altering bytes.
+     */
+
+    let text = "";
+
+    const decoder =
+      new TextDecoder(
+        "latin1",
+        { fatal: false }
+      );
+
+    text =
+      decoder.decode(
+        bytes
+      );
+
+
+    const upper =
+      text.toUpperCase();
+
+
+    /* EXIF */
+
+    const exifFound =
+      detectEXIF(
+        bytes,
+        upper
+      );
+
+    setStatus(
+      exifStatus,
+      exifFound
+    );
+
+
+    /* XMP */
+
+    const xmpFound =
+      detectXMP(
+        upper
+      );
+
+    setStatus(
+      xmpStatus,
+      xmpFound
+    );
+
+
+    /* IPTC */
+
+    const iptcFound =
+      detectIPTC(
+        bytes,
+        upper
+      );
+
+    setStatus(
+      iptcStatus,
+      iptcFound
+    );
+
+
+    /* C2PA / JUMBF */
+
+    const c2paFound =
+      detectC2PA(
+        upper
+      );
+
+    setStatus(
+      c2paStatus,
+      c2paFound
+    );
+
+  }
+
+  catch (error) {
+
+    status.innerText =
+      "⚠️ Could not fully analyze this file.";
+
+  }
+
+}
+
+
+/* =========================
+   EXIF DETECTION
+========================= */
+
+function detectEXIF(bytes, text) {
+
+  /*
+   * JPEG APP1 commonly starts with:
+   * FF D8 FF E1
+   * and contains "Exif"
+   */
+
+  for (
+    let i = 0;
+    i < bytes.length - 5;
+    i++
+  ) {
+
+    if (
+      bytes[i] === 0xFF &&
+      bytes[i + 1] === 0xE1 &&
+      bytes[i + 4] === 0x45 &&
+      bytes[i + 5] === 0x78
+    ) {
+
+      return true;
+
+    }
+
+  }
+
+
+  return text.includes("EXIF");
+}
+
+
+/* =========================
+   XMP DETECTION
+========================= */
+
+function detectXMP(text) {
+
+  return (
+    text.includes("XMP") ||
+    text.includes(
+      "HTTP://NS.ADOBE.COM/XAP"
+    ) ||
+    text.includes(
+      "HTTP://NS.ADOBE.COM/PHOTOSHOP"
+    ) ||
+    text.includes(
+      "<?XPACKET"
+    )
+  );
+
+}
+
+
+/* =========================
+   IPTC DETECTION
+========================= */
+
+function detectIPTC(bytes, text) {
+
+  /*
+   * Common IPTC / Photoshop resource
+   * markers can appear inside JPEG data.
+   */
+
+  return (
+    text.includes("IPTC") ||
+    text.includes("PHOTOSHOP 3.0") ||
+    text.includes("8BIM")
+  );
+
+}
+
+
+/* =========================
+   C2PA / JUMBF INDICATORS
+========================= */
+
+function detectC2PA(text) {
+
+  /*
+   * This is only an indicator scan.
+   * It does NOT validate a C2PA manifest.
+   */
+
+  return (
+    text.includes("C2PA") ||
+    text.includes("JUMBF") ||
+    text.includes("CONTENT CREDENTIALS") ||
+    text.includes("CONTENTAUTHENTICITY")
+  );
+
+}
+
+
+/* =========================
+   STATUS DISPLAY
+========================= */
+
+function setStatus(element, found) {
+
+  if (found) {
+
+    element.innerText =
+      "⚠ Possible marker";
+
+    element.className =
+      "found";
+
+  }
+
+  else {
+
+    element.innerText =
+      "✓ Not detected";
+
+    element.className =
+      "clean";
+
+  }
+
+}
+
+
+/* =========================
+   CLEAN IMAGE
+========================= */
+
+cleanButton.addEventListener(
+  "click",
+  function() {
+
+    if (!selectedImage) {
+      return;
+    }
+
+
+    cleanButton.disabled = true;
+
+    downloadButton.style.display = "none";
+
+    status.innerText =
+      "⏳ Creating cleaned image...";
+
+
+    const img =
+      new Image();
+
+    const sourceURL =
+      URL.createObjectURL(
+        selectedImage
+      );
+
+
+    img.onload = function() {
+
+      try {
+
+        const canvas =
+          document.createElement(
+            "canvas"
+          );
+
+
+        canvas.width =
+          img.naturalWidth;
+
+        canvas.height =
+          img.naturalHeight;
+
+
+        const ctx =
+          canvas.getContext(
+            "2d"
+          );
+
+
+        ctx.drawImage(
+          img,
+          0,
+          0
+        );
+
+
+        /*
+         * Exporting pixels into a new JPEG
+         * creates a fresh file rather than
+         * copying the original metadata blocks.
+         */
+
+        canvas.toBlob(
+          function(blob) {
+
+            if (!blob) {
+
+              status.innerText =
+                "❌ Could not create cleaned image.";
+
+              cleanButton.disabled =
+                false;
+
+              return;
+
+            }
+
+
+            if (downloadURL) {
+              URL.revokeObjectURL(
+                downloadURL
+              );
+            }
+
+
+            downloadURL =
+              URL.createObjectURL(
+                blob
+              );
+
+
+            downloadButton.href =
+              downloadURL;
+
+            downloadButton.download =
+              "cleaned-image.jpg";
+
+
+            downloadButton.style.display =
+              "block";
+
+
+            status.innerHTML =
+              "✅ <b>Image processed successfully.</b>" +
+              "<br><br>" +
+              "Original: " +
+              formatBytes(
+                selectedImage.size
+              ) +
+              "<br>" +
+              "Cleaned: " +
+              formatBytes(
+                blob.size
+              );
+
+
+            resetButton.style.display =
+              "block";
+
+
+            cleanButton.disabled =
+              false;
+
+
+            URL.revokeObjectURL(
+              sourceURL
+            );
+
+          },
+          "image/jpeg",
+          0.95
+        );
+
+      }
+
+      catch (error) {
+
+        status.innerText =
+          "❌ Processing failed.";
+
+        cleanButton.disabled =
+          false;
+
+      }
+
+    };
+
+
+    img.onerror = function() {
+
+      status.innerText =
+        "❌ Unable to read this image.";
+
+      cleanButton.disabled =
+        false;
+
+      URL.revokeObjectURL(
+        sourceURL
+      );
+
+    };
+
+
+    img.src =
+      sourceURL;
+
+  }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+resetButton.addEventListener(
+  "click",
+  function() {
+
+    imageInput.value = "";
+
+    selectedImage = null;
+
+    preview.style.display =
+      "none";
+
+    analyzer.style.display =
+      "none";
+
+    cleanButton.disabled =
+      true;
+
+    downloadButton.style.display =
+      "none";
+
+    resetButton.style.display =
+      "none";
+
+    status.innerText = "";
+
+  }
+);
+
+
+/* =========================
+   FORMAT BYTES
+========================= */
 
 function formatBytes(bytes) {
 
   if (bytes === 0) {
     return "0 Bytes";
   }
+
 
   const units = [
     "Bytes",
@@ -375,35 +882,28 @@ function formatBytes(bytes) {
     "GB"
   ];
 
+
   const index =
     Math.floor(
       Math.log(bytes) /
       Math.log(1024)
     );
 
+
   return (
     parseFloat(
-      (bytes /
-      Math.pow(1024, index))
-      .toFixed(2)
+      (
+        bytes /
+        Math.pow(
+          1024,
+          index
+        )
+      ).toFixed(2)
     )
-    + " "
-    + units[index]
+    +
+    " " +
+    units[index]
   );
-
-}
-
-
-/* BASIC TEXT ESCAPE */
-
-function escapeHTML(text) {
-
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
 
 }
 
