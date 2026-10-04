@@ -1,85 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Momin AI Clean Studio</title>
 
 <meta name="description"
-content="Momin AI Clean Studio — privacy-focused image metadata cleaner and inspector.">
+content="Momin AI Clean Studio - privacy-focused image metadata cleaner and inspector.">
 
 <style>
+
+/* =========================
+   RESET
+========================= */
+
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
 }
 
+
+/* =========================
+   BODY
+========================= */
+
 body{
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
   background:
-    radial-gradient(circle at top,#17213a 0%,#090d16 42%,#05070c 100%);
-  color:#fff;
+    radial-gradient(
+      circle at top,
+      #17213a 0%,
+      #090d16 45%,
+      #05070c 100%
+    );
+
+  color:#ffffff;
   min-height:100vh;
 }
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
 
 .container{
   width:min(960px,94%);
   margin:auto;
-  padding:28px 0 45px;
+  padding:25px 0 45px;
 }
+
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
   text-align:center;
-  padding:22px 10px 28px;
+  padding:20px 10px 28px;
 }
 
 .logo{
-  width:62px;
-  height:62px;
+  width:64px;
+  height:64px;
+
   margin:auto;
-  border-radius:20px;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:31px;
-  background:linear-gradient(135deg,#19c8df,#685cff);
-  box-shadow:0 12px 35px rgba(40,150,255,.22);
+
+  border-radius:20px;
+
+  font-size:32px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #16c5df,
+      #695cff
+    );
+
+  box-shadow:
+    0 15px 40px
+    rgba(40,150,255,.22);
 }
 
 h1{
   margin-top:15px;
-  font-size:clamp(28px,6vw,46px);
+
+  font-size:
+    clamp(28px,6vw,46px);
+
   letter-spacing:-1px;
 }
 
 .subtitle{
   margin-top:9px;
+
   color:#98a4b8;
+
   font-size:15px;
 }
 
+
+/* =========================
+   CARD
+========================= */
+
 .card{
-  background:rgba(16,23,36,.88);
-  border:1px solid #202c40;
+  background:
+    rgba(16,23,36,.90);
+
+  border:
+    1px solid #202c40;
+
   border-radius:24px;
+
   padding:22px;
+
   margin-top:18px;
-  box-shadow:0 20px 55px rgba(0,0,0,.22);
+
+  box-shadow:
+    0 20px 55px
+    rgba(0,0,0,.22);
 }
 
+
+/* =========================
+   UPLOAD
+========================= */
+
 .upload{
-  border:1.5px dashed #40506b;
+  border:
+    1.5px dashed #40506b;
+
   border-radius:20px;
+
   padding:35px 20px;
+
   text-align:center;
+
   transition:.25s;
 }
 
 .upload:hover{
   border-color:#29c8ed;
-  background:rgba(20,40,65,.35);
+
+  background:
+    rgba(20,40,65,.35);
 }
 
 .upload-icon{
@@ -100,138 +178,113 @@ h1{
 
 .file-button{
   display:inline-block;
+
   margin-top:20px;
-  padding:14px 25px;
+
+  padding:
+    14px 25px;
+
   border-radius:13px;
+
   cursor:pointer;
+
   font-weight:700;
-  background:linear-gradient(135deg,#16c4df,#655cff);
+
+  background:
+    linear-gradient(
+      135deg,
+      #16c4df,
+      #655cff
+    );
+
   color:white;
 }
 
-input[type=file]{
+input[type="file"]{
   display:none;
 }
 
 .support{
   margin-top:14px;
+
   font-size:12px;
+
   color:#68768d;
 }
 
+
+/* =========================
+   ORIGINAL PREVIEW
+========================= */
+
 .preview{
   display:none;
+
   margin-top:22px;
+
   text-align:center;
 }
 
 .preview img{
   width:100%;
+
   max-height:520px;
+
   object-fit:contain;
+
   border-radius:18px;
+
   background:#070b12;
+
   border:1px solid #202c40;
 }
 
 .filename{
   color:#aeb9c9;
+
   margin-top:10px;
+
   font-size:13px;
+
   word-break:break-all;
 }
 
-/* BEFORE AFTER */
 
-.compare-card{
-  display:none;
-}
-
-.compare-title{
-  font-size:21px;
-  font-weight:700;
-  margin-bottom:15px;
-}
-
-.compare{
-  position:relative;
-  width:100%;
-  max-height:620px;
-  overflow:hidden;
-  border-radius:18px;
-  background:#05070c;
-  border:1px solid #26344a;
-  user-select:none;
-}
-
-.compare img{
-  display:block;
-  width:100%;
-  height:auto;
-  max-height:620px;
-  object-fit:contain;
-}
-
-.after-image{
-  position:absolute;
-  inset:0;
-  width:50%;
-  overflow:hidden;
-  border-right:3px solid white;
-}
-
-.after-image img{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  max-width:none;
-}
-
-.slider{
-  width:100%;
-  margin-top:16px;
-  accent-color:#38c9ed;
-}
-
-.compare-label{
-  position:absolute;
-  top:12px;
-  padding:7px 11px;
-  border-radius:9px;
-  background:rgba(0,0,0,.68);
-  font-size:12px;
-  font-weight:bold;
-  z-index:5;
-}
-
-.label-before{
-  right:12px;
-}
-
-.label-after{
-  left:12px;
-}
+/* =========================
+   INFO GRID
+========================= */
 
 .info-grid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+
+  grid-template-columns:
+    repeat(2,1fr);
+
   gap:12px;
+
   margin-top:20px;
 }
 
 .info{
   background:#09101c;
-  border:1px solid #1c283a;
+
+  border:
+    1px solid #1c283a;
+
   border-radius:15px;
+
   padding:16px;
 }
 
 .info span{
   display:block;
+
   color:#718097;
+
   font-size:12px;
+
   text-transform:uppercase;
+
   margin-bottom:7px;
 }
 
@@ -239,28 +292,48 @@ input[type=file]{
   font-size:16px;
 }
 
+
+/* =========================
+   STATUS
+========================= */
+
 .status-list{
   margin-top:18px;
 }
 
 .status{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
+
   gap:10px;
+
   padding:15px;
+
   background:#09101c;
+
   border-radius:13px;
+
   margin-top:8px;
-  border:1px solid #111d2d;
+
+  border:
+    1px solid #111d2d;
+
   color:#b9c3d2;
 }
 
 .badge{
-  padding:7px 11px;
+  padding:
+    7px 11px;
+
   border-radius:999px;
+
   font-size:12px;
+
   font-weight:bold;
+
   white-space:nowrap;
 }
 
@@ -274,21 +347,45 @@ input[type=file]{
   color:#ff747b;
 }
 
+.checking{
+  background:#18253a;
+  color:#8fb8ff;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
 button{
   border:0;
+
   cursor:pointer;
+
   font-family:inherit;
 }
 
 .clean-button{
   width:100%;
+
   margin-top:20px;
+
   padding:17px;
+
   border-radius:15px;
+
   color:#fff;
+
   font-size:17px;
+
   font-weight:800;
-  background:linear-gradient(100deg,#16c5df,#685cff);
+
+  background:
+    linear-gradient(
+      100deg,
+      #16c5df,
+      #685cff
+    );
 }
 
 .clean-button:active{
@@ -297,73 +394,246 @@ button{
 
 .download{
   display:none;
+
   width:100%;
+
   margin-top:12px;
+
   padding:16px;
+
   border-radius:15px;
+
   background:#17243a;
-  border:1px solid #2b3b55;
+
+  border:
+    1px solid #2b3b55;
+
   color:white;
+
   font-size:16px;
+
   font-weight:700;
+
   text-decoration:none;
+
   text-align:center;
 }
 
 .new-image{
   display:none;
+
   width:100%;
+
   margin-top:12px;
+
   padding:14px;
+
   border-radius:14px;
+
   background:#101a2a;
-  border:1px solid #293951;
+
+  border:
+    1px solid #293951;
+
   color:#b9c7da;
+
   font-weight:700;
 }
 
+
+/* =========================
+   MESSAGE
+========================= */
+
 .message{
   display:none;
+
   margin-top:16px;
+
   padding:16px;
+
   text-align:center;
+
   border-radius:14px;
+
   background:#07351e;
+
   color:#5ee994;
+
   line-height:1.6;
 }
+
+
+/* =========================
+   NOTICE
+========================= */
 
 .notice{
   margin-top:18px;
+
   padding:15px;
+
   border-radius:14px;
+
   background:#111a28;
-  border:1px solid #24334a;
+
+  border:
+    1px solid #24334a;
+
   color:#8491a5;
+
   font-size:13px;
+
   line-height:1.6;
 }
 
-footer{
-  text-align:center;
-  color:#5f6c80;
-  font-size:12px;
-  padding:25px 10px 5px;
+
+/* =========================
+   BEFORE AFTER
+========================= */
+
+.compare-card{
+  display:none;
 }
 
-.hidden{
-  display:none!important;
+.compare-title{
+  font-size:21px;
+
+  font-weight:700;
+
+  margin-bottom:15px;
 }
+
+.compare{
+  position:relative;
+
+  width:100%;
+
+  overflow:hidden;
+
+  border-radius:18px;
+
+  background:#05070c;
+
+  border:
+    1px solid #26344a;
+
+  user-select:none;
+
+  line-height:0;
+}
+
+.compare > img{
+  display:block;
+
+  width:100%;
+
+  height:auto;
+}
+
+.after-image{
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  height:100%;
+
+  width:50%;
+
+  overflow:hidden;
+
+  border-right:
+    3px solid #ffffff;
+}
+
+.after-image img{
+  position:absolute;
+
+  left:0;
+  top:0;
+
+  width:100%;
+
+  height:100%;
+
+  max-width:none;
+
+  object-fit:cover;
+}
+
+.compare-label{
+  position:absolute;
+
+  top:12px;
+
+  padding:
+    7px 11px;
+
+  border-radius:9px;
+
+  background:
+    rgba(0,0,0,.68);
+
+  font-size:12px;
+
+  font-weight:bold;
+
+  line-height:normal;
+
+  z-index:5;
+}
+
+.label-before{
+  right:12px;
+}
+
+.label-after{
+  left:12px;
+}
+
+.slider{
+  width:100%;
+
+  margin-top:16px;
+
+  accent-color:#38c9ed;
+
+  cursor:pointer;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  text-align:center;
+
+  color:#5f6c80;
+
+  font-size:12px;
+
+  padding:
+    25px 10px 5px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:600px){
 
   .container{
     width:94%;
+
     padding-top:14px;
   }
 
   .card{
     padding:16px;
+
     border-radius:20px;
   }
 
@@ -379,255 +649,518 @@ footer{
     font-size:14px;
   }
 
-  .compare{
-    max-height:480px;
-  }
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-  <header class="header">
-    <div class="logo">🧹</div>
 
-    <h1>Momin AI Clean Studio</h1>
+<!-- =========================
+     HEADER
+========================= -->
 
-    <p class="subtitle">
-      Privacy-focused image metadata cleaner & inspector
-    </p>
-  </header>
+<header class="header">
+
+  <div class="logo">
+    🧹
+  </div>
+
+  <h1>
+    Momin AI Clean Studio
+  </h1>
+
+  <p class="subtitle">
+    Privacy-focused image metadata cleaner & inspector
+  </p>
+
+</header>
 
 
-  <!-- UPLOAD -->
+<!-- =========================
+     UPLOAD CARD
+========================= -->
 
-  <section class="card">
+<section class="card">
 
-    <div class="upload">
+  <div class="upload">
 
-      <div class="upload-icon">🖼️</div>
-
-      <div class="upload-title">
-        Choose an Image
-      </div>
-
-      <div class="upload-text">
-        Select an image from your device
-      </div>
-
-      <label class="file-button" for="fileInput">
-        📁 Choose Image
-      </label>
-
-      <input
-        id="fileInput"
-        type="file"
-        accept="image/png,image/jpeg,image/webp"
-      >
-
-      <div class="support">
-        PNG, JPG, JPEG, WEBP supported
-      </div>
-
+    <div class="upload-icon">
+      🖼️
     </div>
 
-    <div class="preview" id="previewBox">
-
-      <img id="previewImage" alt="Image preview">
-
-      <div class="filename" id="fileName"></div>
-
+    <div class="upload-title">
+      Choose an Image
     </div>
 
-  </section>
-
-
-  <!-- ANALYSIS -->
-
-  <section class="card" id="analysisCard" style="display:none;">
-
-    <h2>🔍 Image Analysis</h2>
-
-    <div class="info-grid">
-
-      <div class="info">
-        <span>File Type</span>
-        <strong id="fileType">—</strong>
-      </div>
-
-      <div class="info">
-        <span>File Size</span>
-        <strong id="fileSize">—</strong>
-      </div>
-
-      <div class="info">
-        <span>Dimensions</span>
-        <strong id="dimensions">—</strong>
-      </div>
-
-      <div class="info">
-        <span>Format</span>
-        <strong id="format">—</strong>
-      </div>
-
+    <div class="upload-text">
+      Select an image from your device
     </div>
 
+    <label
+      class="file-button"
+      for="fileInput">
 
-    <div class="status-list">
+      📁 Choose Image
 
-      <div class="status">
-        <span>EXIF Metadata</span>
-        <span class="badge ok" id="exifStatus">Not detected</span>
-      </div>
-
-      <div class="status">
-        <span>XMP Metadata</span>
-        <span class="badge ok" id="xmpStatus">Not detected</span>
-      </div>
-
-      <div class="status">
-        <span>IPTC Metadata</span>
-        <span class="badge ok" id="iptcStatus">Not detected</span>
-      </div>
-
-      <div class="status">
-        <span>C2PA / JUMBF Marker</span>
-        <span class="badge ok" id="c2paStatus">Not detected</span>
-      </div>
-
-      <div class="status">
-        <span>AI Disclosure Marker</span>
-        <span class="badge ok" id="aiStatus">Not detected</span>
-      </div>
-
-    </div>
-
-
-    <button class="clean-button" id="cleanButton">
-      🧹 CLEAN IMAGE
-    </button>
-
-    <a
-      class="download"
-      id="downloadButton"
-      download="momin-clean-image.png"
-    >
-      ⬇️ DOWNLOAD CLEAN COPY
-    </a>
-
-    <button class="new-image" id="newImageButton">
-      🔄 CLEAN ANOTHER IMAGE
-    </button>
-
-    <div class="message" id="message"></div>
-
-    <div class="notice">
-      🔒 Your image is processed locally in this browser.
-      This page does not upload your image to a server.
-
-      <br><br>
-
-      This tool creates a fresh rendered image for privacy
-      and metadata cleaning. It does not guarantee removal
-      of platform-specific provenance or disclosure systems.
-    </div>
-
-  </section>
-
-
-  <!-- BEFORE / AFTER -->
-
-  <section class="card compare-card" id="compareCard">
-
-    <div class="compare-title">
-      🌓 Before / After Comparison
-    </div>
-
-    <div class="compare" id="compareBox">
-
-      <img id="beforeImage" alt="Original image">
-
-      <div class="after-image" id="afterLayer">
-
-        <img id="afterImage" alt="Clean image">
-
-      </div>
-
-      <div class="compare-label label-after">
-        CLEAN
-      </div>
-
-      <div class="compare-label label-before">
-        ORIGINAL
-      </div>
-
-    </div>
+    </label>
 
     <input
-      class="slider"
-      id="compareSlider"
-      type="range"
-      min="0"
-      max="100"
-      value="50"
-    >
+      id="fileInput"
+      type="file"
+      accept="image/png,image/jpeg,image/webp">
 
-  </section>
+    <div class="support">
+      PNG, JPG, JPEG, WEBP supported
+    </div>
+
+  </div>
 
 
-  <footer>
-    Momin AI Clean Studio • Browser-side processing • Free
-  </footer>
+  <div
+    class="preview"
+    id="previewBox">
+
+    <img
+      id="previewImage"
+      alt="Image preview">
+
+    <div
+      class="filename"
+      id="fileName">
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- =========================
+     ANALYSIS CARD
+========================= -->
+
+<section
+  class="card"
+  id="analysisCard"
+  style="display:none;">
+
+  <h2>
+    🔍 Image Analysis
+  </h2>
+
+
+  <div class="info-grid">
+
+
+    <div class="info">
+
+      <span>
+        File Type
+      </span>
+
+      <strong id="fileType">
+        —
+      </strong>
+
+    </div>
+
+
+    <div class="info">
+
+      <span>
+        File Size
+      </span>
+
+      <strong id="fileSize">
+        —
+      </strong>
+
+    </div>
+
+
+    <div class="info">
+
+      <span>
+        Dimensions
+      </span>
+
+      <strong id="dimensions">
+        —
+      </strong>
+
+    </div>
+
+
+    <div class="info">
+
+      <span>
+        Format
+      </span>
+
+      <strong id="format">
+        —
+      </strong>
+
+    </div>
+
+
+  </div>
+
+
+
+  <div class="status-list">
+
+
+    <div class="status">
+
+      <span>
+        EXIF Metadata
+      </span>
+
+      <span
+        class="badge checking"
+        id="exifStatus">
+
+        Checking...
+
+      </span>
+
+    </div>
+
+
+    <div class="status">
+
+      <span>
+        XMP Metadata
+      </span>
+
+      <span
+        class="badge checking"
+        id="xmpStatus">
+
+        Checking...
+
+      </span>
+
+    </div>
+
+
+    <div class="status">
+
+      <span>
+        IPTC Metadata
+      </span>
+
+      <span
+        class="badge checking"
+        id="iptcStatus">
+
+        Checking...
+
+      </span>
+
+    </div>
+
+
+    <div class="status">
+
+      <span>
+        C2PA / JUMBF Marker
+      </span>
+
+      <span
+        class="badge checking"
+        id="c2paStatus">
+
+        Checking...
+
+      </span>
+
+    </div>
+
+
+    <div class="status">
+
+      <span>
+        AI Disclosure Marker
+      </span>
+
+      <span
+        class="badge checking"
+        id="aiStatus">
+
+        Checking...
+
+      </span>
+
+    </div>
+
+
+  </div>
+
+
+
+  <button
+    class="clean-button"
+    id="cleanButton">
+
+    🧹 CLEAN IMAGE
+
+  </button>
+
+
+  <a
+    class="download"
+    id="downloadButton"
+    download="momin-clean-image.png">
+
+    ⬇️ DOWNLOAD CLEAN COPY
+
+  </a>
+
+
+  <button
+    class="new-image"
+    id="newImageButton">
+
+    🔄 CLEAN ANOTHER IMAGE
+
+  </button>
+
+
+  <div
+    class="message"
+    id="message">
+  </div>
+
+
+  <div class="notice">
+
+    🔒 Your image is processed locally
+    in this browser.
+
+    This page does not upload your image
+    to a server.
+
+    <br><br>
+
+    This tool creates a fresh rendered
+    image for privacy and metadata cleaning.
+
+    <br><br>
+
+    Metadata inspection is informational
+    and does not determine whether an image
+    was created by AI.
+
+    <br><br>
+
+    This tool does not guarantee removal
+    of platform-specific provenance or
+    disclosure systems.
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =========================
+     BEFORE / AFTER
+========================= -->
+
+<section
+  class="card compare-card"
+  id="compareCard">
+
+
+  <div class="compare-title">
+
+    🌓 Before / After Comparison
+
+  </div>
+
+
+  <div
+    class="compare"
+    id="compareBox">
+
+
+    <img
+      id="beforeImage"
+      alt="Original image">
+
+
+    <div
+      class="after-image"
+      id="afterLayer">
+
+
+      <img
+        id="afterImage"
+        alt="Clean image">
+
+
+    </div>
+
+
+    <div
+      class="compare-label label-after">
+
+      CLEAN
+
+    </div>
+
+
+    <div
+      class="compare-label label-before">
+
+      ORIGINAL
+
+    </div>
+
+
+  </div>
+
+
+  <input
+    class="slider"
+    id="compareSlider"
+    type="range"
+    min="0"
+    max="100"
+    value="50">
+
+</section>
+
+
+
+<footer>
+
+  Momin AI Clean Studio
+  • Browser-side processing
+  • Free
+
+</footer>
+
 
 </div>
 
 
+
 <script>
 
-const fileInput = document.getElementById("fileInput");
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
-const previewBox = document.getElementById("previewBox");
-const previewImage = document.getElementById("previewImage");
-const fileName = document.getElementById("fileName");
+const fileInput =
+  document.getElementById("fileInput");
 
-const analysisCard = document.getElementById("analysisCard");
+const previewBox =
+  document.getElementById("previewBox");
 
-const fileType = document.getElementById("fileType");
-const fileSize = document.getElementById("fileSize");
-const dimensions = document.getElementById("dimensions");
-const format = document.getElementById("format");
+const previewImage =
+  document.getElementById("previewImage");
 
-const exifStatus = document.getElementById("exifStatus");
-const xmpStatus = document.getElementById("xmpStatus");
-const iptcStatus = document.getElementById("iptcStatus");
-const c2paStatus = document.getElementById("c2paStatus");
-const aiStatus = document.getElementById("aiStatus");
+const fileName =
+  document.getElementById("fileName");
 
-const cleanButton = document.getElementById("cleanButton");
-const downloadButton = document.getElementById("downloadButton");
-const newImageButton = document.getElementById("newImageButton");
+const analysisCard =
+  document.getElementById("analysisCard");
 
-const message = document.getElementById("message");
+const fileType =
+  document.getElementById("fileType");
 
-const compareCard = document.getElementById("compareCard");
-const beforeImage = document.getElementById("beforeImage");
-const afterImage = document.getElementById("afterImage");
-const afterLayer = document.getElementById("afterLayer");
-const compareSlider = document.getElementById("compareSlider");
+const fileSize =
+  document.getElementById("fileSize");
 
+const dimensions =
+  document.getElementById("dimensions");
+
+const format =
+  document.getElementById("format");
+
+const exifStatus =
+  document.getElementById("exifStatus");
+
+const xmpStatus =
+  document.getElementById("xmpStatus");
+
+const iptcStatus =
+  document.getElementById("iptcStatus");
+
+const c2paStatus =
+  document.getElementById("c2paStatus");
+
+const aiStatus =
+  document.getElementById("aiStatus");
+
+const cleanButton =
+  document.getElementById("cleanButton");
+
+const downloadButton =
+  document.getElementById("downloadButton");
+
+const newImageButton =
+  document.getElementById("newImageButton");
+
+const message =
+  document.getElementById("message");
+
+const compareCard =
+  document.getElementById("compareCard");
+
+const compareBox =
+  document.getElementById("compareBox");
+
+const beforeImage =
+  document.getElementById("beforeImage");
+
+const afterImage =
+  document.getElementById("afterImage");
+
+const afterLayer =
+  document.getElementById("afterLayer");
+
+const compareSlider =
+  document.getElementById("compareSlider");
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
 
 let currentFile = null;
+
 let originalObjectURL = null;
+
 let cleanObjectURL = null;
+
 let originalSize = 0;
+
 let cleanSize = 0;
 
 
+/* =====================================================
+   FILE SIZE
+===================================================== */
+
 function formatBytes(bytes){
 
-  if(bytes === 0) return "0 Bytes";
+  if(bytes === 0){
+
+    return "0 Bytes";
+
+  }
 
   const units = [
     "Bytes",
@@ -636,7 +1169,7 @@ function formatBytes(bytes){
     "GB"
   ];
 
-  const i =
+  const index =
     Math.floor(
       Math.log(bytes) /
       Math.log(1024)
@@ -644,106 +1177,1036 @@ function formatBytes(bytes){
 
   return (
     parseFloat(
-      (bytes / Math.pow(1024,i))
-      .toFixed(2)
+      (
+        bytes /
+        Math.pow(1024,index)
+      ).toFixed(2)
     )
     + " "
-    + units[i]
+    + units[index]
   );
+
 }
 
 
-function setBadge(element, detected){
+/* =====================================================
+   STATUS
+===================================================== */
+
+function setStatus(element,state){
+
+  if(state === "checking"){
+
+    element.textContent =
+      "Checking...";
+
+    element.className =
+      "badge checking";
+
+    return;
+
+  }
+
+
+  if(state === "present"){
+
+    element.textContent =
+      "Present";
+
+    element.className =
+      "badge detected";
+
+    return;
+
+  }
+
+
+  if(state === "unable"){
+
+    element.textContent =
+      "Unable to verify";
+
+    element.className =
+      "badge checking";
+
+    return;
+
+  }
+
 
   element.textContent =
-    detected
-    ? "Detected"
-    : "Not detected";
+    "Not found";
 
   element.className =
-    "badge " +
-    (detected ? "detected" : "ok");
+    "badge ok";
+
 }
 
 
-function scanMetadata(file){
+/* =====================================================
+   ASCII READER
+===================================================== */
 
-  return new Promise(resolve => {
+function readASCII(
+  bytes,
+  start,
+  length
+){
 
-    const reader = new FileReader();
+  let output = "";
 
-    reader.onload = function(){
+  const end =
+    Math.min(
+      start + length,
+      bytes.length
+    );
 
-      try{
+  for(
+    let i=start;
+    i<end;
+    i++
+  ){
 
-        const bytes =
-          new Uint8Array(reader.result);
+    const value =
+      bytes[i];
 
-        const text =
-          new TextDecoder(
-            "latin1"
-          ).decode(bytes);
+    if(
+      value >= 32 &&
+      value <= 126
+    ){
 
-        const upper =
-          text.toUpperCase();
+      output +=
+        String.fromCharCode(value);
 
-        const result = {
+    }else{
 
-          exif:
-            upper.includes("EXIF"),
+      output += " ";
 
-          xmp:
-            upper.includes("XMP"),
+    }
 
-          iptc:
-            upper.includes("IPTC"),
+  }
 
-          c2pa:
-            upper.includes("C2PA") ||
-            upper.includes("JUMBF"),
+  return output;
 
-          ai:
-            upper.includes("AI DISCLOSURE") ||
-            upper.includes("AIGENERATED") ||
-            upper.includes("AI_GENERATED") ||
-            upper.includes("GENERATIVE AI")
+}
 
-        };
 
-        resolve(result);
+/* =====================================================
+   BYTE SEARCH
+===================================================== */
 
-      }catch(error){
+function containsBytes(
+  bytes,
+  sequence
+){
 
-        resolve({
-          exif:false,
-          xmp:false,
-          iptc:false,
-          c2pa:false,
-          ai:false
-        });
+  if(
+    sequence.length === 0 ||
+    bytes.length < sequence.length
+  ){
+
+    return false;
+
+  }
+
+  outer:
+
+  for(
+    let i=0;
+    i<=bytes.length-sequence.length;
+    i++
+  ){
+
+    for(
+      let j=0;
+      j<sequence.length;
+      j++
+    ){
+
+      if(
+        bytes[i+j] !== sequence[j]
+      ){
+
+        continue outer;
 
       }
 
-    };
+    }
 
-    reader.onerror = () => {
+    return true;
 
-      resolve({
-        exif:false,
-        xmp:false,
-        iptc:false,
-        c2pa:false,
-        ai:false
-      });
+  }
 
-    };
-
-    reader.readAsArrayBuffer(file);
-
-  });
+  return false;
 
 }
 
+
+/* =====================================================
+   ASCII SEARCH
+===================================================== */
+
+function containsText(
+  bytes,
+  text
+){
+
+  const target =
+    text.toLowerCase();
+
+  const chunkSize =
+    1024 * 1024;
+
+  for(
+    let start=0;
+    start<bytes.length;
+    start += chunkSize
+  ){
+
+    const end =
+      Math.min(
+        start + chunkSize,
+        bytes.length
+      );
+
+    const textPart =
+      readASCII(
+        bytes,
+        start,
+        end-start
+      ).toLowerCase();
+
+    if(
+      textPart.includes(target)
+    ){
+
+      return true;
+
+    }
+
+  }
+
+  return false;
+
+}
+
+
+/* =====================================================
+   PNG INSPECTOR
+===================================================== */
+
+function inspectPNG(bytes){
+
+  const result = {
+
+    exif:false,
+    xmp:false,
+    iptc:false,
+    c2pa:false,
+    ai:false
+
+  };
+
+
+  /* PNG signature */
+
+  if(
+    bytes.length < 8 ||
+    bytes[0] !== 0x89 ||
+    bytes[1] !== 0x50 ||
+    bytes[2] !== 0x4E ||
+    bytes[3] !== 0x47 ||
+    bytes[4] !== 0x0D ||
+    bytes[5] !== 0x0A ||
+    bytes[6] !== 0x1A ||
+    bytes[7] !== 0x0A
+  ){
+
+    return result;
+
+  }
+
+
+  let offset = 8;
+
+
+  while(
+    offset + 12 <= bytes.length
+  ){
+
+    const length =
+      (
+        (
+          bytes[offset] << 24
+        ) >>> 0
+      )
+      +
+      (
+        bytes[offset+1] << 16
+      )
+      +
+      (
+        bytes[offset+2] << 8
+      )
+      +
+      bytes[offset+3];
+
+
+    const type =
+      readASCII(
+        bytes,
+        offset+4,
+        4
+      );
+
+
+    const dataStart =
+      offset+8;
+
+    const dataEnd =
+      dataStart+length;
+
+
+    if(
+      dataEnd+4 >
+      bytes.length
+    ){
+
+      break;
+
+    }
+
+
+    const chunkText =
+      readASCII(
+        bytes,
+        dataStart,
+        Math.min(
+          length,
+          1024*1024
+        )
+      ).toLowerCase();
+
+
+    /* PNG EXIF chunk */
+
+    if(
+      type === "eXIf"
+    ){
+
+      result.exif = true;
+
+    }
+
+
+    /* PNG textual metadata */
+
+    if(
+      type === "iTXt" ||
+      type === "tEXt" ||
+      type === "zTXt"
+    ){
+
+      if(
+        chunkText.includes(
+          "http://ns.adobe.com/xap/"
+        ) ||
+        chunkText.includes(
+          "xmpmeta"
+        ) ||
+        chunkText.includes(
+          "adobe.xmp"
+        )
+      ){
+
+        result.xmp = true;
+
+      }
+
+
+      if(
+        chunkText.includes("iptc") ||
+        chunkText.includes("iptc4xmp")
+      ){
+
+        result.iptc = true;
+
+      }
+
+
+      if(
+        chunkText.includes("c2pa") ||
+        chunkText.includes("jumbf") ||
+        chunkText.includes(
+          "contentcredentials"
+        )
+      ){
+
+        result.c2pa = true;
+
+      }
+
+
+      if(
+        chunkText.includes(
+          "ai generated"
+        ) ||
+        chunkText.includes(
+          "ai_generated"
+        ) ||
+        chunkText.includes(
+          "generative ai"
+        )
+      ){
+
+        result.ai = true;
+
+      }
+
+    }
+
+
+    offset =
+      dataEnd+4;
+
+
+    if(
+      type === "IEND"
+    ){
+
+      break;
+
+    }
+
+  }
+
+
+  /*
+    Additional structured XMP check
+  */
+
+  if(
+    !result.xmp &&
+    containsText(
+      bytes,
+      "http://ns.adobe.com/xap/"
+    )
+  ){
+
+    result.xmp = true;
+
+  }
+
+
+  /*
+    Additional C2PA/JUMBF check
+  */
+
+  if(
+    !result.c2pa &&
+    (
+      containsText(bytes,"c2pa") ||
+      containsText(bytes,"jumbf")
+    )
+  ){
+
+    result.c2pa = true;
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =====================================================
+   JPEG INSPECTOR
+===================================================== */
+
+function inspectJPEG(bytes){
+
+  const result = {
+
+    exif:false,
+    xmp:false,
+    iptc:false,
+    c2pa:false,
+    ai:false
+
+  };
+
+
+  /* JPEG signature */
+
+  if(
+    bytes.length < 2 ||
+    bytes[0] !== 0xFF ||
+    bytes[1] !== 0xD8
+  ){
+
+    return result;
+
+  }
+
+
+  let offset = 2;
+
+
+  while(
+    offset + 4 <= bytes.length
+  ){
+
+    if(
+      bytes[offset] !== 0xFF
+    ){
+
+      offset++;
+      continue;
+
+    }
+
+
+    while(
+      offset < bytes.length &&
+      bytes[offset] === 0xFF
+    ){
+
+      offset++;
+
+    }
+
+
+    if(
+      offset >= bytes.length
+    ){
+
+      break;
+
+    }
+
+
+    const marker =
+      bytes[offset];
+
+    offset++;
+
+
+    /*
+      Standalone markers
+    */
+
+    if(
+      marker === 0xD8 ||
+      marker === 0xD9 ||
+      (
+        marker >= 0xD0 &&
+        marker <= 0xD7
+      )
+    ){
+
+      continue;
+
+    }
+
+
+    if(
+      offset+2 >
+      bytes.length
+    ){
+
+      break;
+
+    }
+
+
+    const segmentLength =
+      (
+        bytes[offset] << 8
+      )
+      |
+      bytes[offset+1];
+
+
+    if(
+      segmentLength < 2 ||
+      offset+segmentLength >
+      bytes.length
+    ){
+
+      break;
+
+    }
+
+
+    const dataStart =
+      offset+2;
+
+    const dataLength =
+      segmentLength-2;
+
+
+    const text =
+      readASCII(
+        bytes,
+        dataStart,
+        Math.min(
+          dataLength,
+          1024*1024
+        )
+      );
+
+
+    const lower =
+      text.toLowerCase();
+
+
+    /* =====================
+       EXIF
+    ===================== */
+
+    if(
+      marker === 0xE1 &&
+      (
+        text.startsWith("Exif") ||
+        lower.includes("exif")
+      )
+    ){
+
+      result.exif = true;
+
+    }
+
+
+    /* =====================
+       XMP
+    ===================== */
+
+    if(
+      marker === 0xE1 &&
+      (
+        lower.includes(
+          "http://ns.adobe.com/xap/"
+        ) ||
+        lower.includes(
+          "adobe.xmp"
+        ) ||
+        lower.includes(
+          "xmpmeta"
+        )
+      )
+    ){
+
+      result.xmp = true;
+
+    }
+
+
+    /* =====================
+       IPTC / PHOTOSHOP APP13
+    ===================== */
+
+    if(
+      marker === 0xED
+    ){
+
+      /*
+        Photoshop resource signature:
+        8BIM
+
+        IPTC resource ID:
+        0x0404
+      */
+
+      const has8BIM =
+        containsBytes(
+          bytes.subarray(
+            dataStart,
+            dataStart+dataLength
+          ),
+          [
+            0x38,
+            0x42,
+            0x49,
+            0x4D
+          ]
+        );
+
+
+      const hasIPTC =
+        containsBytes(
+          bytes.subarray(
+            dataStart,
+            dataStart+dataLength
+          ),
+          [
+            0x04,
+            0x04
+          ]
+        );
+
+
+      if(
+        has8BIM &&
+        hasIPTC
+      ){
+
+        result.iptc = true;
+
+      }
+
+    }
+
+
+    /* =====================
+       C2PA / JUMBF
+    ===================== */
+
+    if(
+      marker === 0xEB ||
+      marker === 0xE1 ||
+      marker === 0xEF
+    ){
+
+      if(
+        lower.includes("c2pa") ||
+        lower.includes("jumbf") ||
+        lower.includes(
+          "contentcredentials"
+        )
+      ){
+
+        result.c2pa = true;
+
+      }
+
+    }
+
+
+    /*
+      Explicit AI disclosure strings.
+      This is NOT an AI detector.
+    */
+
+    if(
+      lower.includes(
+        "ai generated"
+      ) ||
+      lower.includes(
+        "ai_generated"
+      ) ||
+      lower.includes(
+        "generative ai"
+      )
+    ){
+
+      result.ai = true;
+
+    }
+
+
+    offset +=
+      segmentLength;
+
+  }
+
+
+  /*
+    Additional XMP verification
+  */
+
+  if(
+    !result.xmp &&
+    containsText(
+      bytes,
+      "http://ns.adobe.com/xap/"
+    )
+  ){
+
+    result.xmp = true;
+
+  }
+
+
+  /*
+    Additional C2PA verification
+  */
+
+  if(
+    !result.c2pa &&
+    (
+      containsText(bytes,"c2pa") ||
+      containsText(bytes,"jumbf")
+    )
+  ){
+
+    result.c2pa = true;
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =====================================================
+   WEBP INSPECTOR
+===================================================== */
+
+function inspectWEBP(bytes){
+
+  const result = {
+
+    exif:false,
+    xmp:false,
+    iptc:false,
+    c2pa:false,
+    ai:false
+
+  };
+
+
+  const header =
+    readASCII(
+      bytes,
+      0,
+      Math.min(
+        16,
+        bytes.length
+      )
+    );
+
+
+  if(
+    !header.startsWith("RIFF") ||
+    !header.includes("WEBP")
+  ){
+
+    return result;
+
+  }
+
+
+  let offset = 12;
+
+
+  while(
+    offset+8 <= bytes.length
+  ){
+
+    const chunkType =
+      readASCII(
+        bytes,
+        offset,
+        4
+      );
+
+
+    const size =
+      (
+        bytes[offset+4] |
+        (
+          bytes[offset+5] << 8
+        ) |
+        (
+          bytes[offset+6] << 16
+        ) |
+        (
+          bytes[offset+7] << 24
+        )
+      ) >>> 0;
+
+
+    const dataStart =
+      offset+8;
+
+    const dataEnd =
+      dataStart+size;
+
+
+    if(
+      dataEnd >
+      bytes.length
+    ){
+
+      break;
+
+    }
+
+
+    const upper =
+      chunkType.toUpperCase();
+
+
+    /* EXIF chunk */
+
+    if(
+      upper === "EXIF"
+    ){
+
+      result.exif = true;
+
+    }
+
+
+    /* XMP chunk */
+
+    if(
+      upper === "XMP "
+    ){
+
+      result.xmp = true;
+
+    }
+
+
+    const text =
+      readASCII(
+        bytes,
+        dataStart,
+        Math.min(
+          size,
+          1024*1024
+        )
+      ).toLowerCase();
+
+
+    if(
+      text.includes("iptc")
+    ){
+
+      result.iptc = true;
+
+    }
+
+
+    if(
+      text.includes("c2pa") ||
+      text.includes("jumbf") ||
+      text.includes(
+        "contentcredentials"
+      )
+    ){
+
+      result.c2pa = true;
+
+    }
+
+
+    if(
+      text.includes(
+        "ai generated"
+      ) ||
+      text.includes(
+        "ai_generated"
+      ) ||
+      text.includes(
+        "generative ai"
+      )
+    ){
+
+      result.ai = true;
+
+    }
+
+
+    offset =
+      dataEnd +
+      (size % 2);
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =====================================================
+   MAIN INSPECTOR
+===================================================== */
+
+async function inspectMetadata(file){
+
+  try{
+
+    const buffer =
+      await file.arrayBuffer();
+
+    const bytes =
+      new Uint8Array(buffer);
+
+
+    const type =
+      file.type.toLowerCase();
+
+
+    if(
+      type === "image/png"
+    ){
+
+      return inspectPNG(bytes);
+
+    }
+
+
+    if(
+      type === "image/jpeg" ||
+      type === "image/jpg"
+    ){
+
+      return inspectJPEG(bytes);
+
+    }
+
+
+    if(
+      type === "image/webp"
+    ){
+
+      return inspectWEBP(bytes);
+
+    }
+
+
+    return {
+
+      exif:"unable",
+      xmp:"unable",
+      iptc:"unable",
+      c2pa:"unable",
+      ai:"unable"
+
+    };
+
+  }
+  catch(error){
+
+    console.error(
+      "Metadata inspection error:",
+      error
+    );
+
+
+    return {
+
+      exif:"unable",
+      xmp:"unable",
+      iptc:"unable",
+      c2pa:"unable",
+      ai:"unable"
+
+    };
+
+  }
+
+}
+
+
+/* =====================================================
+   FILE SELECT
+===================================================== */
 
 fileInput.addEventListener(
   "change",
@@ -752,11 +2215,19 @@ fileInput.addEventListener(
     const file =
       this.files[0];
 
-    if(!file) return;
+
+    if(!file){
+
+      return;
+
+    }
 
 
-    currentFile = file;
-    originalSize = file.size;
+    currentFile =
+      file;
+
+    originalSize =
+      file.size;
 
 
     if(originalObjectURL){
@@ -767,8 +2238,11 @@ fileInput.addEventListener(
 
     }
 
+
     originalObjectURL =
-      URL.createObjectURL(file);
+      URL.createObjectURL(
+        file
+      );
 
 
     previewImage.src =
@@ -800,23 +2274,61 @@ fileInput.addEventListener(
     fileName.textContent =
       file.name;
 
+
     fileType.textContent =
-      file.type || "Unknown";
+      file.type ||
+      "Unknown";
+
 
     fileSize.textContent =
-      formatBytes(file.size);
+      formatBytes(
+        file.size
+      );
+
 
     format.textContent =
       (
-        file.type || ""
+        file.type ||
+        "unknown"
       )
       .split("/")
       .pop()
       .toUpperCase();
 
 
+    /* Reset */
+
+    setStatus(
+      exifStatus,
+      "checking"
+    );
+
+    setStatus(
+      xmpStatus,
+      "checking"
+    );
+
+    setStatus(
+      iptcStatus,
+      "checking"
+    );
+
+    setStatus(
+      c2paStatus,
+      "checking"
+    );
+
+    setStatus(
+      aiStatus,
+      "checking"
+    );
+
+
+    /* Read dimensions */
+
     const image =
       new Image();
+
 
     image.onload =
       async function(){
@@ -824,35 +2336,53 @@ fileInput.addEventListener(
         dimensions.textContent =
           `${image.naturalWidth} × ${image.naturalHeight} px`;
 
-        const result =
-          await scanMetadata(file);
 
-        setBadge(
+        /*
+          Real structured inspection
+        */
+
+        const result =
+          await inspectMetadata(
+            file
+          );
+
+
+        setStatus(
           exifStatus,
           result.exif
         );
 
-        setBadge(
+        setStatus(
           xmpStatus,
           result.xmp
         );
 
-        setBadge(
+        setStatus(
           iptcStatus,
           result.iptc
         );
 
-        setBadge(
+        setStatus(
           c2paStatus,
           result.c2pa
         );
 
-        setBadge(
+        setStatus(
           aiStatus,
           result.ai
         );
 
       };
+
+
+    image.onerror =
+      function(){
+
+        dimensions.textContent =
+          "Unable to read";
+
+      };
+
 
     image.src =
       originalObjectURL;
@@ -861,11 +2391,19 @@ fileInput.addEventListener(
 );
 
 
+/* =====================================================
+   CLEAN IMAGE
+===================================================== */
+
 cleanButton.addEventListener(
   "click",
   function(){
 
-    if(!currentFile) return;
+    if(!currentFile){
+
+      return;
+
+    }
 
 
     cleanButton.disabled =
@@ -878,6 +2416,7 @@ cleanButton.addEventListener(
     const image =
       new Image();
 
+
     image.onload =
       function(){
 
@@ -885,6 +2424,7 @@ cleanButton.addEventListener(
           document.createElement(
             "canvas"
           );
+
 
         canvas.width =
           image.naturalWidth;
@@ -894,9 +2434,12 @@ cleanButton.addEventListener(
 
 
         const ctx =
-          canvas.getContext("2d", {
-            alpha:true
-          });
+          canvas.getContext(
+            "2d",
+            {
+              alpha:true
+            }
+          );
 
 
         ctx.drawImage(
@@ -916,6 +2459,7 @@ cleanButton.addEventListener(
 
               cleanButton.textContent =
                 "🧹 CLEAN IMAGE";
+
 
               message.style.display =
                 "block";
@@ -948,7 +2492,9 @@ cleanButton.addEventListener(
 
 
             cleanObjectURL =
-              URL.createObjectURL(blob);
+              URL.createObjectURL(
+                blob
+              );
 
 
             afterImage.src =
@@ -965,6 +2511,7 @@ cleanButton.addEventListener(
 
             downloadButton.style.display =
               "block";
+
 
             newImageButton.style.display =
               "block";
@@ -985,9 +2532,15 @@ cleanButton.addEventListener(
 
 
             message.innerHTML =
-              `✅ Image processed successfully.<br>
-              Original: ${formatBytes(originalSize)}
-              → Clean copy: ${formatBytes(cleanSize)}`;
+              `
+              ✅ Image processed successfully.
+              <br>
+              Original:
+              ${formatBytes(originalSize)}
+              →
+              Clean copy:
+              ${formatBytes(cleanSize)}
+              `;
 
 
             cleanButton.disabled =
@@ -997,14 +2550,20 @@ cleanButton.addEventListener(
               "🧹 CLEAN IMAGE";
 
 
+            setupComparison();
+
+
             compareCard.scrollIntoView({
               behavior:"smooth",
               block:"start"
             });
 
           },
+
           "image/png",
+
           1
+
         );
 
       };
@@ -1019,8 +2578,15 @@ cleanButton.addEventListener(
         cleanButton.textContent =
           "🧹 CLEAN IMAGE";
 
+
         message.style.display =
           "block";
+
+        message.style.background =
+          "#4a161b";
+
+        message.style.color =
+          "#ff858b";
 
         message.textContent =
           "❌ Unable to process this image.";
@@ -1035,54 +2601,109 @@ cleanButton.addEventListener(
 );
 
 
-/* BEFORE / AFTER SLIDER */
+/* =====================================================
+   BEFORE / AFTER SETUP
+===================================================== */
+
+function setupComparison(){
+
+  const width =
+    compareBox.clientWidth;
+
+
+  afterImage.style.width =
+    width + "px";
+
+
+  afterLayer.style.width =
+    compareSlider.value + "%";
+
+}
+
+
+/* =====================================================
+   SLIDER
+===================================================== */
 
 compareSlider.addEventListener(
   "input",
   function(){
 
-    const value =
-      this.value;
-
     afterLayer.style.width =
-      value + "%";
+      this.value + "%";
+
+
+    const width =
+      compareBox.clientWidth;
+
 
     afterImage.style.width =
-      (
-        10000 / value
-      ) + "%";
+      width + "px";
 
   }
 );
 
 
-/* NEW IMAGE */
+/* =====================================================
+   RESIZE
+===================================================== */
+
+window.addEventListener(
+  "resize",
+  function(){
+
+    if(
+      compareCard.style.display !==
+      "none"
+    ){
+
+      setupComparison();
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   NEW IMAGE
+===================================================== */
 
 newImageButton.addEventListener(
   "click",
   function(){
 
-    fileInput.value = "";
+    fileInput.value =
+      "";
 
-    currentFile = null;
+
+    currentFile =
+      null;
+
 
     previewBox.style.display =
       "none";
 
+
     analysisCard.style.display =
       "none";
+
 
     compareCard.style.display =
       "none";
 
+
     downloadButton.style.display =
       "none";
+
 
     newImageButton.style.display =
       "none";
 
+
     message.style.display =
       "none";
+
 
     window.scrollTo({
       top:0,
@@ -1092,7 +2713,37 @@ newImageButton.addEventListener(
   }
 );
 
+
+/* =====================================================
+   CLEANUP
+===================================================== */
+
+window.addEventListener(
+  "beforeunload",
+  function(){
+
+    if(originalObjectURL){
+
+      URL.revokeObjectURL(
+        originalObjectURL
+      );
+
+    }
+
+
+    if(cleanObjectURL){
+
+      URL.revokeObjectURL(
+        cleanObjectURL
+      );
+
+    }
+
+  }
+);
+
 </script>
 
 </body>
+
 </html>
