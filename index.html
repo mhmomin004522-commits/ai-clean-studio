@@ -2745,6 +2745,15 @@ window.addEventListener(
 );
 
 </script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js")
+      .then(() => console.log("Momin Clean offline mode ready"))
+      .catch(error => console.error("Offline setup failed:", error));
+  });
+}
+</script>
 
 </body>
 
