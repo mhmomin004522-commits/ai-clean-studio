@@ -3929,7 +3929,588 @@ logoutButton.addEventListener(
   }
 );
 
-   </script>
+ <!-- ================================
+     MOMIN PLAN & FREE CLEAN SYSTEM
+================================ -->
+<script type="module">
+import { initializeApp, getApps, getApp } 
+  from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  increment
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUov30Ufe7qV7bF0EnASCBHM1PNB5vmJ-I",
+  authDomain: "momin-ai-clean-studio.firebaseapp.com",
+  projectId: "momin-ai-clean-studio",
+  storageBucket: "momin-ai-clean-studio.firebasestorage.app",
+  messagingSenderId: "424390464998",
+  appId: "1:424390464998:web:7d78b28efd66f1baf03227",
+  measurementId: "G-J9SC13WBQQ"
+};
+
+
+const planApp =
+  getApps().length
+    ? getApp()
+    : initializeApp(firebaseConfig);
+
+const planAuth = getAuth(planApp);
+const db = getFirestore(planApp);
+
+
+/* ================================
+   PLAN VARIABLES
+================================ */
+
+let currentUserData = null;
+let currentUserDoc = null;
+
+const FREE_LIMIT = 2;
+
+
+/* ================================
+   PLAN UI
+================================ */
+
+const planStyle = document.createElement("style");
+
+planStyle.textContent = `
+#mominPlanBar{
+  position:fixed;
+  left:15px;
+  top:15px;
+  z-index:999997;
+  padding:9px 13px;
+  border-radius:12px;
+  background:rgba(10,16,28,.94);
+  border:1px solid #263650;
+  color:#dce5f3;
+  font-size:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+
+#mominPlanButton{
+  margin-left:8px;
+  border:0;
+  border-radius:8px;
+  padding:6px 10px;
+  background:linear-gradient(135deg,#16c4df,#655cff);
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+#mominPremiumBox{
+  position:fixed;
+  inset:0;
+  z-index:999996;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(3,6,12,.90);
+  backdrop-filter:blur(10px);
+}
+
+.momin-premium-card{
+  width:min(430px,100%);
+  padding:26px;
+  border-radius:24px;
+  background:#101724;
+  border:1px solid #293851;
+  color:white;
+  text-align:center;
+  box-shadow:0 25px 80px rgba(0,0,0,.55);
+}
+
+.momin-premium-card h2{
+  margin-bottom:10px;
+}
+
+.momin-premium-card p{
+  color:#9aa8bc;
+  line-height:1.6;
+  font-size:14px;
+}
+
+.momin-plan-option{
+  margin-top:10px;
+  padding:12px;
+  border:1px solid #30415b;
+  border-radius:12px;
+  background:#0b111d;
+  color:white;
+  text-align:left;
+}
+
+.momin-close-premium{
+  margin-top:18px;
+  padding:10px 18px;
+  border:0;
+  border-radius:10px;
+  background:#27364d;
+  color:white;
+  cursor:pointer;
+}
+`;
+
+document.head.appendChild(planStyle);
+
+
+/* ================================
+   PLAN BAR
+================================ */
+
+const planBar = document.createElement("div");
+
+planBar.id = "mominPlanBar";
+
+planBar.innerHTML = `
+  <span id="mominPlanText">
+    Plan: Checking...
+  </span>
+
+  <button id="mominPlanButton">
+    Premium
+  </button>
+`;
+
+document.body.appendChild(planBar);
+
+
+/* ================================
+   PREMIUM BOX
+================================ */
+
+const premiumBox = document.createElement("div");
+
+premiumBox.id = "mominPremiumBox";
+
+premiumBox.innerHTML = `
+  <div class="momin-premium-card">
+
+    <h2>✨ Upgrade to Premium</h2>
+
+    <p>
+      Your free image cleaning limit has been reached.
+      Choose a Premium plan to continue.
+    </p>
+
+    <div class="momin-plan-option">
+      📅 3 Months — Premium
+    </div>
+
+    <div class="momin-plan-option">
+      📅 6 Months — Premium
+    </div>
+
+    <div class="momin-plan-option">
+      📅 12 Months — Premium
+    </div>
+
+    <div class="momin-plan-option">
+      ♾️ Lifetime — Premium
+    </div>
+
+    <p style="margin-top:15px;">
+      bKash / Rocket payment information
+      will be added here.
+    </p>
+
+    <button class="momin-close-premium" id="mominClosePremium">
+      Close
+    </button>
+
+  </div>
+`;
+
+document.body.appendChild(premiumBox);
+
+
+document
+  .getElementById("mominClosePremium")
+  .addEventListener("click", () => {
+    premiumBox.style.display = "none";
+  });
+
+
+document
+  .getElementById("mominPlanButton")
+  .addEventListener("click", () => {
+    premiumBox.style.display = "flex";
+  });
+
+
+/* ================================
+   LOAD USER PLAN
+================================ */
+
+async function loadUserPlan(user){
+
+  if(!user || !user.email){
+    return;
+  }
+
+  const email = user.email.toLowerCase();
+
+  currentUserDoc = doc(db, "users", email);
+
+  try{
+
+    const snap = await getDoc(currentUserDoc);
+
+    if(!snap.exists()){
+
+      await setDoc(currentUserDoc, {
+
+        email: email,
+
+        role: "user",
+
+        plan: "free",
+
+        freeCleans: 0,
+
+        premiumPlan: "none",
+
+        isActive: true
+
+      });
+
+      currentUserData = {
+        email: email,
+        role: "user",
+        plan: "free",
+        freeCleans: 0,
+        premiumPlan: "none",
+        isActive: true
+      };
+
+    }else{
+
+      currentUserData = snap.data();
+
+    }
+
+
+    updatePlanUI();
+
+  }catch(error){
+
+    console.error(
+      "Momin plan system error:",
+      error
+    );
+
+    document.getElementById(
+      "mominPlanText"
+    ).textContent =
+      "Plan: Connection error";
+
+  }
+
+}
+
+
+/* ================================
+   UPDATE PLAN UI
+================================ */
+
+function updatePlanUI(){
+
+  if(!currentUserData){
+    return;
+  }
+
+
+  const role =
+    currentUserData.role || "user";
+
+  const plan =
+    currentUserData.plan || "free";
+
+  const freeCleans =
+    Number(
+      currentUserData.freeCleans || 0
+    );
+
+
+  /* CREATOR = UNLIMITED */
+
+  if(role === "creator"){
+
+    document.getElementById(
+      "mominPlanText"
+    ).textContent =
+      "Creator • Unlimited ♾️";
+
+    document.getElementById(
+      "mominPlanButton"
+    ).style.display =
+      "none";
+
+    return;
+  }
+
+
+  /* PREMIUM */
+
+  if(
+    plan !== "free" &&
+    plan !== "creator" &&
+    currentUserData.isActive === true
+  ){
+
+    document.getElementById(
+      "mominPlanText"
+    ).textContent =
+      "Premium • " + plan;
+
+    return;
+  }
+
+
+  /* FREE USER */
+
+  const remaining =
+    Math.max(
+      0,
+      FREE_LIMIT - freeCleans
+    );
+
+  document.getElementById(
+    "mominPlanText"
+  ).textContent =
+    "Free • " +
+    remaining +
+    " clean" +
+    (remaining === 1 ? "" : "s") +
+    " left";
+
+}
+
+
+/* ================================
+   CHECK BEFORE CLEANING
+================================ */
+
+async function checkCleanPermission(){
+
+  if(!currentUserData){
+
+    alert(
+      "Please login first."
+    );
+
+    return false;
+  }
+
+
+  /* CREATOR */
+
+  if(
+    currentUserData.role === "creator"
+  ){
+
+    return true;
+  }
+
+
+  /* PREMIUM */
+
+  if(
+    currentUserData.plan &&
+    currentUserData.plan !== "free" &&
+    currentUserData.isActive === true
+  ){
+
+    return true;
+  }
+
+
+  /* FREE */
+
+  const used =
+    Number(
+      currentUserData.freeCleans || 0
+    );
+
+
+  if(used >= FREE_LIMIT){
+
+    premiumBox.style.display =
+      "flex";
+
+    return false;
+  }
+
+
+  return true;
+}
+
+
+/* ================================
+   COUNT ONE FREE CLEAN
+================================ */
+
+async function consumeFreeClean(){
+
+  if(!currentUserData){
+    return;
+  }
+
+
+  if(
+    currentUserData.role === "creator"
+  ){
+    return;
+  }
+
+
+  if(
+    currentUserData.plan &&
+    currentUserData.plan !== "free"
+  ){
+    return;
+  }
+
+
+  try{
+
+    await updateDoc(
+      currentUserDoc,
+      {
+        freeCleans: increment(1)
+      }
+    );
+
+    currentUserData.freeCleans =
+      Number(
+        currentUserData.freeCleans || 0
+      ) + 1;
+
+    updatePlanUI();
+
+  }catch(error){
+
+    console.error(
+      "Free clean count error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ================================
+   AUTH STATE
+================================ */
+
+onAuthStateChanged(
+  planAuth,
+  async function(user){
+
+    if(user){
+
+      await loadUserPlan(user);
+
+    }else{
+
+      planBar.style.display =
+        "none";
+
+      premiumBox.style.display =
+        "none";
+
+    }
+
+  }
+);
+
+
+/* ================================
+   CLEAN BUTTON CONTROL
+================================ */
+
+setTimeout(() => {
+
+  const cleanButton =
+    document.getElementById(
+      "cleanButton"
+    );
+
+  if(!cleanButton){
+
+    console.warn(
+      "cleanButton not found"
+    );
+
+    return;
+  }
+
+
+  cleanButton.addEventListener(
+    "click",
+    async function(event){
+
+      const allowed =
+        await checkCleanPermission();
+
+      if(!allowed){
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        return;
+      }
+
+
+      /*
+       * Give the existing cleaner time
+       * to finish before counting the clean.
+       */
+
+      setTimeout(
+        async () => {
+
+          if(
+            currentUserData &&
+            currentUserData.role !== "creator" &&
+            (
+              !currentUserData.plan ||
+              currentUserData.plan === "free"
+            )
+          ){
+
+            await consumeFreeClean();
+
+          }
+
+        },
+        1200
+      );
+
+    },
+    true
+  );
+
+}, 1500);
+
+  </script>
 </body>
 
 </html>
