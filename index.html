@@ -3163,7 +3163,773 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  sendPasswordResetEmail
+} from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+
+/* ==============================
+   FIREBASE CONFIG
+============================== */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCUov30Ufeq7VbF0EnASCBHM1PNB5vmJ-I",
+  authDomain: "momin-ai-clean-studio.firebaseapp.com",
+  projectId: "momin-ai-clean-studio",
+  storageBucket: "momin-ai-clean-studio.firebasestorage.app",
+  messagingSenderId: "424390464998",
+  appId: "1:424390464998:web:7d78b28efd66f1baf03227",
+  measurementId: "G-J9SC13WBQQ"
+};
+
+
+/* ==============================
+   INITIALIZE FIREBASE
+============================== */
+
+const firebaseApp = initializeApp(firebaseConfig);
+
+const auth = getAuth(firebaseApp);
+
+
+/* ==============================
+   HIDE MAIN APP UNTIL LOGIN
+============================== */
+
+const mainApp = document.querySelector(".container");
+
+
+/* ==============================
+   AUTH STYLE
+============================== */
+
+const authStyle = document.createElement("style");
+
+authStyle.textContent = `
+
+#mominAuthGate{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:999999;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      #17213a 0%,
+      #090d16 48%,
+      #05070c 100%
+    );
+
+  color:white;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+}
+
+.momin-auth-card{
+
+  width:min(430px,100%);
+
+  background:rgba(16,23,36,.96);
+
+  border:1px solid #263650;
+
+  border-radius:26px;
+
+  padding:28px;
+
+  box-shadow:
+    0 25px 80px
+    rgba(0,0,0,.45);
+
+}
+
+.momin-auth-logo{
+
+  width:70px;
+
+  height:70px;
+
+  margin:0 auto 18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border-radius:22px;
+
+  font-size:34px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #16c5df,
+      #695cff
+    );
+
+  box-shadow:
+    0 15px 40px
+    rgba(40,150,255,.25);
+
+}
+
+.momin-auth-title{
+
+  text-align:center;
+
+  font-size:27px;
+
+  font-weight:800;
+
+}
+
+.momin-auth-subtitle{
+
+  text-align:center;
+
+  color:#8d9ab0;
+
+  margin-top:8px;
+
+  margin-bottom:22px;
+
+  font-size:14px;
+
+}
+
+.momin-auth-tabs{
+
+  display:flex;
+
+  gap:8px;
+
+  margin-bottom:18px;
+
+}
+
+.momin-auth-tab{
+
+  flex:1;
+
+  padding:12px;
+
+  border:1px solid #2c3a51;
+
+  border-radius:12px;
+
+  background:#111a29;
+
+  color:#9caac0;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+}
+
+.momin-auth-tab.active{
+
+  background:
+    linear-gradient(
+      135deg,
+      #16c4df,
+      #655cff
+    );
+
+  color:white;
+
+  border-color:transparent;
+
+}
+
+.momin-auth-input{
+
+  width:100%;
+
+  padding:14px 15px;
+
+  margin-top:10px;
+
+  border-radius:13px;
+
+  border:1px solid #30405a;
+
+  background:#0b111d;
+
+  color:white;
+
+  outline:none;
+
+  font-size:15px;
+
+}
+
+.momin-auth-input:focus{
+
+  border-color:#24c9ec;
+
+}
+
+.momin-auth-button{
+
+  width:100%;
+
+  margin-top:18px;
+
+  padding:14px;
+
+  border:0;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #16c4df,
+      #655cff
+    );
+
+  color:white;
+
+  font-size:16px;
+
+  font-weight:800;
+
+  cursor:pointer;
+
+}
+
+.momin-auth-reset{
+
+  display:block;
+
+  text-align:center;
+
+  margin-top:15px;
+
+  color:#54c9ef;
+
+  font-size:13px;
+
+  cursor:pointer;
+
+}
+
+.momin-auth-message{
+
+  min-height:20px;
+
+  margin-top:14px;
+
+  text-align:center;
+
+  font-size:13px;
+
+  color:#ffb4b4;
+
+}
+
+#mominUserBar{
+
+  position:fixed;
+
+  right:15px;
+
+  top:15px;
+
+  z-index:999998;
+
+  display:none;
+
+  align-items:center;
+
+  gap:8px;
+
+  padding:8px 10px;
+
+  border-radius:12px;
+
+  background:rgba(10,16,28,.92);
+
+  border:1px solid #263650;
+
+  color:#dce5f3;
+
+  font-size:12px;
+
+}
+
+#mominLogout{
+
+  border:0;
+
+  border-radius:8px;
+
+  padding:7px 10px;
+
+  background:#27364d;
+
+  color:white;
+
+  cursor:pointer;
+
+}
+
+`;
+
+document.head.appendChild(authStyle);
+
+
+/* ==============================
+   AUTH HTML
+============================== */
+
+const authGate = document.createElement("div");
+
+authGate.id = "mominAuthGate";
+
+authGate.innerHTML = `
+
+  <div class="momin-auth-card">
+
+    <div class="momin-auth-logo">
+      🧹
+    </div>
+
+    <div class="momin-auth-title">
+      Momin AI Clean Studio
+    </div>
+
+    <div class="momin-auth-subtitle">
+      Create an account or login to continue
+    </div>
+
+
+    <div class="momin-auth-tabs">
+
+      <button
+        id="mominLoginTab"
+        class="momin-auth-tab active"
+        type="button">
+
+        Login
+
+      </button>
+
+
+      <button
+        id="mominSignupTab"
+        class="momin-auth-tab"
+        type="button">
+
+        Sign Up
+
+      </button>
+
+    </div>
+
+
+    <form id="mominAuthForm">
+
+      <input
+        id="mominEmail"
+        class="momin-auth-input"
+        type="email"
+        placeholder="Email address"
+        autocomplete="email"
+        required>
+
+
+      <input
+        id="mominPassword"
+        class="momin-auth-input"
+        type="password"
+        placeholder="Password"
+        autocomplete="current-password"
+        minlength="6"
+        required>
+
+
+      <button
+        id="mominAuthButton"
+        class="momin-auth-button"
+        type="submit">
+
+        Login
+
+      </button>
+
+    </form>
+
+
+    <div
+      id="mominReset"
+      class="momin-auth-reset">
+
+      Forgot password?
+
+    </div>
+
+
+    <div
+      id="mominAuthMessage"
+      class="momin-auth-message">
+
+    </div>
+
+  </div>
+
+`;
+
+document.body.appendChild(authGate);
+
+
+/* ==============================
+   USER BAR
+============================== */
+
+const userBar = document.createElement("div");
+
+userBar.id = "mominUserBar";
+
+userBar.innerHTML = `
+
+  <span id="mominUserEmail"></span>
+
+  <button id="mominLogout">
+    Logout
+  </button>
+
+`;
+
+document.body.appendChild(userBar);
+
+
+/* ==============================
+   ELEMENTS
+============================== */
+
+const loginTab =
+  document.getElementById("mominLoginTab");
+
+const signupTab =
+  document.getElementById("mominSignupTab");
+
+const authForm =
+  document.getElementById("mominAuthForm");
+
+const emailInput =
+  document.getElementById("mominEmail");
+
+const passwordInput =
+  document.getElementById("mominPassword");
+
+const authButton =
+  document.getElementById("mominAuthButton");
+
+const authMessage =
+  document.getElementById("mominAuthMessage");
+
+const resetButton =
+  document.getElementById("mominReset");
+
+const logoutButton =
+  document.getElementById("mominLogout");
+
+const userEmail =
+  document.getElementById("mominUserEmail");
+
+
+let authMode = "login";
+
+
+/* ==============================
+   CHANGE LOGIN / SIGNUP
+============================== */
+
+function setAuthMode(mode){
+
+  authMode = mode;
+
+  authMessage.textContent = "";
+
+  if(mode === "login"){
+
+    loginTab.classList.add("active");
+
+    signupTab.classList.remove("active");
+
+    authButton.textContent = "Login";
+
+    passwordInput.autocomplete = "current-password";
+
+    resetButton.style.display = "block";
+
+  }else{
+
+    signupTab.classList.add("active");
+
+    loginTab.classList.remove("active");
+
+    authButton.textContent = "Create Account";
+
+    passwordInput.autocomplete = "new-password";
+
+    resetButton.style.display = "none";
+
+  }
+
+}
+
+
+loginTab.addEventListener(
+  "click",
+  () => setAuthMode("login")
+);
+
+
+signupTab.addEventListener(
+  "click",
+  () => setAuthMode("signup")
+);
+
+
+/* ==============================
+   SIGNUP / LOGIN
+============================== */
+
+authForm.addEventListener(
+  "submit",
+  async function(event){
+
+    event.preventDefault();
+
+    const email =
+      emailInput.value.trim();
+
+    const password =
+      passwordInput.value;
+
+
+    authMessage.style.color = "#9edfff";
+
+    authMessage.textContent =
+      authMode === "signup"
+      ? "Creating your account..."
+      : "Logging in...";
+
+
+    try{
+
+      if(authMode === "signup"){
+
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        await signOut(auth);
+
+        setAuthMode("login");
+
+        passwordInput.value = "";
+
+        authMessage.style.color =
+          "#7ee2a8";
+
+        authMessage.textContent =
+          "Account created successfully. Please login.";
+
+      }else{
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      }
+
+    }catch(error){
+
+      console.error(error);
+
+      authMessage.style.color =
+        "#ff9d9d";
+
+      if(error.code === "auth/email-already-in-use"){
+
+        authMessage.textContent =
+          "This email already has an account. Please login.";
+
+      }else if(error.code === "auth/invalid-email"){
+
+        authMessage.textContent =
+          "Please enter a valid email address.";
+
+      }else if(error.code === "auth/weak-password"){
+
+        authMessage.textContent =
+          "Password must be at least 6 characters.";
+
+      }else if(
+        error.code === "auth/invalid-credential" ||
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/user-not-found"
+      ){
+
+        authMessage.textContent =
+          "Incorrect email or password.";
+
+      }else{
+
+        authMessage.textContent =
+          error.message || "Something went wrong.";
+
+      }
+
+    }
+
+  }
+);
+
+
+/* ==============================
+   PASSWORD RESET
+============================== */
+
+resetButton.addEventListener(
+  "click",
+  async function(){
+
+    const email =
+      emailInput.value.trim();
+
+    if(!email){
+
+      authMessage.style.color =
+        "#ffcf70";
+
+      authMessage.textContent =
+        "Enter your email first.";
+
+      emailInput.focus();
+
+      return;
+
+    }
+
+    try{
+
+      await sendPasswordResetEmail(
+        auth,
+        email
+      );
+
+      authMessage.style.color =
+        "#7ee2a8";
+
+      authMessage.textContent =
+        "Password reset email sent.";
+
+    }catch(error){
+
+      authMessage.style.color =
+        "#ff9d9d";
+
+      authMessage.textContent =
+        "Unable to send reset email.";
+
+    }
+
+  }
+);
+
+
+/* ==============================
+   AUTH STATE
+============================== */
+
+onAuthStateChanged(
+  auth,
+  function(user){
+
+    if(user){
+
+      /* USER LOGGED IN */
+
+      authGate.style.display = "none";
+
+      if(mainApp){
+
+        mainApp.style.display = "";
+
+      }
+
+      userBar.style.display = "flex";
+
+      userEmail.textContent =
+        user.email || "User";
+
+    }else{
+
+      /* USER NOT LOGGED IN */
+
+      authGate.style.display = "flex";
+
+      if(mainApp){
+
+        mainApp.style.display = "none";
+
+      }
+
+      userBar.style.display = "none";
+
+    }
+
+  }
+);
+
+
+/* ==============================
+   LOGOUT
+============================== */
+
+logoutButton.addEventListener(
+  "click",
+  async function(){
+
+    await signOut(auth);
+
+  }
+);
+
+   </script>
 </body>
 
 </html>
