@@ -4235,7 +4235,23 @@ paymentModal.innerHTML = `
       <option value="Nagad">Nagad</option>
       <option value="Card">Card</option>
     </select>
-
+<div
+  id="paymentNumberBox"
+  style="
+    display:none;
+    width:100%;
+    box-sizing:border-box;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:10px;
+    border:1px solid #20c7e8;
+    background:#071b24;
+    color:#5ee7ff;
+    text-align:center;
+    font-weight:bold;
+    line-height:1.5;
+  "
+></div>
     <input
       id="transactionId"
       type="text"
@@ -4360,6 +4376,61 @@ document
 /* =====================================================
    SUBMIT PAYMENT REQUEST
 ===================================================== */
+/* =====================================================
+   PAYMENT METHOD NUMBER
+===================================================== */
+
+document
+  .getElementById("paymentMethod")
+  .addEventListener(
+    "change",
+    function(){
+
+      const method = this.value;
+
+      const box =
+        document.getElementById(
+          "paymentNumberBox"
+        );
+
+      if(
+        method === "bKash" ||
+        method === "Rocket" ||
+        method === "Nagad"
+      ){
+
+        box.style.display = "block";
+
+        box.innerHTML =
+          "💳 " +
+          method +
+          " Payment Number<br>" +
+          "<span style='font-size:18px;'>" +
+          "01303141798" +
+          "</span>";
+
+      }
+      else if(method === "Card"){
+
+        box.style.display = "block";
+
+        box.innerHTML =
+          "💳 Card Payment<br>" +
+          "<span style='font-size:13px;'>" +
+          "Card payment will be available soon." +
+          "</span>";
+
+      }
+      else{
+
+        box.style.display = "none";
+
+        box.innerHTML = "";
+
+      }
+
+    }
+  );
 
 document
   .getElementById("submitPaymentRequest")
