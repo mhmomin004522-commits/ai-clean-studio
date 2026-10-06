@@ -4748,10 +4748,25 @@ function updatePlanUI(){
     currentUserData.isActive === true
   ){
 
-    document.getElementById(
-      "mominPlanText"
-    ).textContent =
-      "Premium • " + plan;
+    let premiumLabel = "Premium";
+
+if(plan === "lifetime"){
+  premiumLabel = "♾️ Lifetime Premium";
+}
+else if(plan === "3-months"){
+  premiumLabel = "Premium • 3 Months";
+}
+else if(plan === "6-months"){
+  premiumLabel = "Premium • 6 Months";
+}
+else if(plan === "12-months"){
+  premiumLabel = "Premium • 12 Months";
+}
+
+document.getElementById(
+  "mominPlanText"
+).textContent =
+  premiumLabel;
 
     return;
   }
