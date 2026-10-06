@@ -4715,7 +4715,8 @@ function updatePlanUI(){
 
   const plan =
     currentUserData.plan || "free";
-
+const premiumPlan =
+  currentUserData.premiumPlan || "none";
   const freeCleans =
     Number(
       currentUserData.freeCleans || 0
