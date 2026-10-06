@@ -3647,7 +3647,60 @@ const emailInput =
 
 const passwordInput =
   document.getElementById("mominPassword");
+const passwordToggle =
+  document.createElement("button");
 
+passwordToggle.type = "button";
+passwordToggle.textContent = "👁️";
+
+passwordToggle.style.cssText =
+  "position:absolute;" +
+  "right:10px;" +
+  "top:50%;" +
+  "transform:translateY(-50%);" +
+  "border:none;" +
+  "background:transparent;" +
+  "cursor:pointer;" +
+  "font-size:18px;" +
+  "padding:4px;" +
+  "z-index:5;";
+
+const passwordWrapper =
+  document.createElement("div");
+
+passwordWrapper.style.position = "relative";
+
+passwordInput.parentNode.insertBefore(
+  passwordWrapper,
+  passwordInput
+);
+
+passwordWrapper.appendChild(
+  passwordInput
+);
+
+passwordWrapper.appendChild(
+  passwordToggle
+);
+
+passwordToggle.addEventListener(
+  "click",
+  function(){
+
+    if(passwordInput.type === "password"){
+
+      passwordInput.type = "text";
+      passwordToggle.textContent = "🙈";
+
+    }else{
+
+      passwordInput.type = "password";
+      passwordToggle.textContent = "👁️";
+
+    }
+
+  }
+);
 const authButton =
   document.getElementById("mominAuthButton");
 
