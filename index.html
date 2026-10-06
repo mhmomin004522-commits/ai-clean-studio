@@ -4155,7 +4155,393 @@ premiumBox.innerHTML = `
 `;
 
 document.body.appendChild(premiumBox);
+/* =====================================================
+   PAYMENT REQUEST FORM
+===================================================== */
 
+const paymentModal =
+  document.createElement("div");
+
+paymentModal.id =
+  "mominPaymentModal";
+
+paymentModal.style.cssText = `
+  position:fixed;
+  inset:0;
+  z-index:999997;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(3,6,12,.92);
+  backdrop-filter:blur(10px);
+`;
+
+paymentModal.innerHTML = `
+  <div style="
+    width:min(460px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#101724;
+    border:1px solid #293952;
+    border-radius:22px;
+    padding:24px;
+    color:white;
+    box-shadow:0 25px 80px rgba(0,0,0,.5);
+  ">
+
+    <h2 style="
+      margin:0 0 8px;
+      text-align:center;
+    ">
+      💳 Premium Payment
+    </h2>
+
+    <p id="selectedPlanText" style="
+      text-align:center;
+      color:#38c9ed;
+      font-weight:bold;
+      margin-bottom:20px;
+    "></p>
+
+    <input
+      id="paymentName"
+      type="text"
+      placeholder="Full Name"
+      style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #34445c;background:#080d16;color:white;"
+    >
+
+    <input
+      id="paymentEmail"
+      type="email"
+      placeholder="Email"
+      style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #34445c;background:#080d16;color:white;"
+    >
+
+    <input
+      id="paymentPhone"
+      type="tel"
+      placeholder="Phone Number"
+      style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #34445c;background:#080d16;color:white;"
+    >
+
+    <select
+      id="paymentMethod"
+      style="width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #34445c;background:#080d16;color:white;"
+    >
+      <option value="">Select Payment Method</option>
+      <option value="bKash">bKash</option>
+      <option value="Rocket">Rocket</option>
+      <option value="Nagad">Nagad</option>
+      <option value="Card">Card</option>
+    </select>
+
+    <input
+      id="transactionId"
+      type="text"
+      placeholder="Transaction ID"
+      style="width:100%;padding:12px;margin-bottom:14px;border-radius:10px;border:1px solid #34445c;background:#080d16;color:white;"
+    >
+
+    <button
+      id="submitPaymentRequest"
+      style="
+        width:100%;
+        padding:13px;
+        border:0;
+        border-radius:11px;
+        background:linear-gradient(135deg,#16c4df,#655cff);
+        color:white;
+        font-weight:bold;
+        cursor:pointer;
+      "
+    >
+      📤 Submit Payment Request
+    </button>
+
+    <button
+      id="closePaymentModal"
+      style="
+        width:100%;
+        margin-top:10px;
+        padding:11px;
+        border:1px solid #34445c;
+        border-radius:11px;
+        background:#182235;
+        color:white;
+        cursor:pointer;
+      "
+    >
+      Close
+    </button>
+
+    <div
+      id="paymentMessage"
+      style="
+        margin-top:14px;
+        text-align:center;
+        font-size:13px;
+        line-height:1.5;
+      "
+    ></div>
+
+  </div>
+`;
+
+document.body.appendChild(paymentModal);
+
+
+/* =====================================================
+   PLAN CLICK
+===================================================== */
+
+document
+  .querySelectorAll(".momin-plan-option")
+  .forEach(function(plan){
+
+    plan.addEventListener(
+      "click",
+      function(){
+
+        const planName =
+          this.dataset.plan;
+
+        const amount =
+          this.dataset.amount;
+
+        document.getElementById(
+          "selectedPlanText"
+        ).textContent =
+          planName.replace(
+            "-",
+            " "
+          ).toUpperCase()
+          + " — ৳"
+          + Number(amount).toLocaleString();
+
+        const currentUser =
+          auth.currentUser;
+
+        if(currentUser){
+
+          document.getElementById(
+            "paymentEmail"
+          ).value =
+            currentUser.email || "";
+
+        }
+
+        paymentModal.style.display =
+          "flex";
+
+      }
+    );
+
+  });
+
+
+/* =====================================================
+   CLOSE PAYMENT
+===================================================== */
+
+document
+  .getElementById("closePaymentModal")
+  .addEventListener(
+    "click",
+    function(){
+
+      paymentModal.style.display =
+        "none";
+
+    }
+  );
+
+
+/* =====================================================
+   SUBMIT PAYMENT REQUEST
+===================================================== */
+
+document
+  .getElementById("submitPaymentRequest")
+  .addEventListener(
+    "click",
+    async function(){
+
+      const currentUser =
+        auth.currentUser;
+
+      if(!currentUser){
+
+        alert("Please login first.");
+
+        return;
+
+      }
+
+      const name =
+        document.getElementById(
+          "paymentName"
+        ).value.trim();
+
+      const email =
+        document.getElementById(
+          "paymentEmail"
+        ).value.trim().toLowerCase();
+
+      const phone =
+        document.getElementById(
+          "paymentPhone"
+        ).value.trim();
+
+      const method =
+        document.getElementById(
+          "paymentMethod"
+        ).value;
+
+      const transactionId =
+        document.getElementById(
+          "transactionId"
+        ).value.trim();
+
+      if(
+        !name ||
+        !email ||
+        !phone ||
+        !method ||
+        !transactionId
+      ){
+
+        alert(
+          "Please fill in all payment information."
+        );
+
+        return;
+
+      }
+
+      if(
+        email !==
+        currentUser.email.toLowerCase()
+      ){
+
+        alert(
+          "Please use your logged-in account email."
+        );
+
+        return;
+
+      }
+
+      const selectedText =
+        document.getElementById(
+          "selectedPlanText"
+        ).textContent;
+
+      const planMatch =
+        selectedText.match(
+          /^(.*?)\s+—\s+৳([\d,]+)$/
+        );
+
+      const plan =
+        planMatch
+          ? planMatch[1].toLowerCase()
+          : "premium";
+
+      const amount =
+        planMatch
+          ? Number(
+              planMatch[2]
+                .replace(/,/g,"")
+            )
+          : 0;
+
+      const requestId =
+        crypto.randomUUID();
+
+      const submitButton =
+        document.getElementById(
+          "submitPaymentRequest"
+        );
+
+      const paymentMessage =
+        document.getElementById(
+          "paymentMessage"
+        );
+
+      submitButton.disabled =
+        true;
+
+      submitButton.textContent =
+        "⏳ Submitting...";
+
+      try{
+
+        await setDoc(
+          doc(
+            db,
+            "paymentRequests",
+            requestId
+          ),
+          {
+            email:
+              currentUser.email.toLowerCase(),
+
+            name:
+              name,
+
+            phone:
+              phone,
+
+            plan:
+              plan,
+
+            amount:
+              amount,
+
+            paymentMethod:
+              method,
+
+            transactionId:
+              transactionId,
+
+            status:
+              "pending",
+
+            createdAt:
+              new Date().toISOString()
+          }
+        );
+
+        paymentMessage.style.color =
+          "#5ee994";
+
+        paymentMessage.textContent =
+          "✅ Payment request submitted successfully. Please wait for admin verification.";
+
+        submitButton.textContent =
+          "✅ Submitted";
+
+      }
+      catch(error){
+
+        console.error(error);
+
+        paymentMessage.style.color =
+          "#ff858b";
+
+        paymentMessage.textContent =
+          "❌ Unable to submit request. Please try again.";
+
+        submitButton.disabled =
+          false;
+
+        submitButton.textContent =
+          "📤 Submit Payment Request";
+
+      }
+
+    }
+  );
 
 document
   .getElementById("mominClosePremium")
