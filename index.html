@@ -4320,7 +4320,7 @@ document
           + Number(amount).toLocaleString();
 
         const currentUser =
-          auth.currentUser;
+          getAuth(getApp()).currentUser;
 
         if(currentUser){
 
@@ -4368,7 +4368,7 @@ document
     async function(){
 
       const currentUser =
-        auth.currentUser;
+        getAuth(getApp()).currentUser;
 
       if(!currentUser){
 
