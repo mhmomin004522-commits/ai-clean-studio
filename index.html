@@ -1119,7 +1119,52 @@ footer{
         box-shadow: 0 10px 32px rgba(70, 90, 255, 0.42);
     }
 }
-</style>
+.main-brand {
+    font-size: 36px;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 0.3px;
+    margin: 8px 0 10px;
+    background: linear-gradient(90deg, #20b8e8, #7c6cff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+#cleanerCard {
+    display: none;
+}
+/* Momin AI Content Remover Button */
+
+.cleaner-entry {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 24px;
+}
+
+#cleanerBtn {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(120, 150, 255, 0.55);
+    border-radius: 16px;
+    padding: 15px 28px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #ffffff;
+    background: linear-gradient(135deg, #7c5cff, #20b8e8);
+    box-shadow: 0 8px 25px rgba(70, 90, 255, 0.25);
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#cleanerBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(70, 90, 255, 0.38);
+}
+
+#cleanerBtn:active {
+    transform: scale(0.97);
+}</style>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CW5P51P7TF"></script>
@@ -1146,14 +1191,12 @@ footer{
 <header class="header">
 
   <div class="logo">
-    🧹
+     🏠
   </div>
 <div class="main-brand">
     🏠 Momin AI Studio
 </div>
-  <h1>
-     Momin AI Content Remover
-  </h1>
+ 
 
   <p class="subtitle">
     Privacy-focused image metadata cleaner & inspector
@@ -1166,12 +1209,17 @@ footer{
         🎨 AI IMAGE GENERATOR
     </button>
 </div>
-
+<!-- IMAGE CLEANER BUTTON -->
+<div class="cleaner-entry">
+    <button id="cleanerBtn" type="button">
+        🧹 Momin AI Content Remover
+    </button>
+</div>
 <!-- =========================
      UPLOAD CARD
 ========================= -->
 
-<section class="card">
+<section class="card" id="cleanerCard">
 
   <div class="upload">
 
@@ -1180,7 +1228,7 @@ footer{
     </div>
 
     <div class="upload-title">
-      Choose an Image
+      Momin AI Content Remover
     </div>
 
     <div class="upload-text">
@@ -5284,7 +5332,32 @@ if (aiGeneratorBtn) {
             });
     });
 }
-  </script>
+/* =========================
+   CLEANER BUTTON
+========================= */
+
+const cleanerBtn = document.getElementById("cleanerBtn");
+const cleanerCard = document.getElementById("cleanerCard");
+
+if (cleanerBtn && cleanerCard) {
+    cleanerBtn.addEventListener("click", function () {
+
+        const isHidden =
+            window.getComputedStyle(cleanerCard).display === "none";
+
+        if (isHidden) {
+            cleanerCard.style.display = "block";
+
+            cleanerCard.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+
+        } else {
+            cleanerCard.style.display = "none";
+        }
+    });
+}  </script>
 </body>
 
 </html>
