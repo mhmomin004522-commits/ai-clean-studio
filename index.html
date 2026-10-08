@@ -5229,7 +5229,51 @@ if (aiGeneratorBtn) {
                     📷 Your Reference Image
                 </label>
 
-                <input
+               <div style="
+    margin-bottom:18px;
+    padding:16px;
+    border:1px solid rgba(120,150,255,.25);
+    border-radius:14px;
+    background:#0b1220;
+">
+
+    <input
+        id="aiReferenceImage"
+        type="file"
+        accept="image/*"
+        style="display:none;"
+    >
+
+    <label
+        for="aiReferenceImage"
+        style="
+            display:block;
+            padding:14px;
+            text-align:center;
+            border:1px dashed rgba(120,150,255,.55);
+            border-radius:12px;
+            color:#ffffff;
+            font-weight:700;
+            cursor:pointer;
+            background:rgba(80,100,255,.08);
+        "
+    >
+        📷 Choose Your Reference Image
+    </label>
+
+    <div
+        id="referencePreview"
+        style="
+            margin-top:12px;
+            text-align:center;
+            color:#8f9bb3;
+            font-size:13px;
+        "
+    >
+        No image selected
+    </div>
+
+</div>
                     id="aiReferenceImage"
                     type="file"
                     accept="image/*"
@@ -5302,36 +5346,326 @@ if (aiGeneratorBtn) {
             "afterend",
             panel
         );
+const referenceInput =
+    document.getElementById("aiReferenceImage");
 
-        document.getElementById("startAIGeneration")
-            .addEventListener("click", function () {
+const referencePreview =
+    document.getElementById("referencePreview");
 
-                const image =
-                    document.getElementById("aiReferenceImage").files[0];
+if (referenceInput && referencePreview) {
 
-                const prompt =
-                    document.getElementById("aiImagePrompt").value.trim();
+    referenceInput.addEventListener("change", function () {
 
-                const status =
-                    document.getElementById("aiGenerationStatus");
+        const file = this.files[0];
 
-                if (!image) {
-                    status.textContent =
-                        "📷 Please choose your reference image.";
-                    return;
-                }
+        if (!file) {
+            referencePreview.textContent =
+                "No image selected";
+            return;
+        }
 
-                if (!prompt) {
-                    status.textContent =
-                        "✍️ Please enter an image prompt.";
-                    return;
-                }
+        const imageURL = URL.createObjectURL(file);
 
-                status.textContent =
-                    "⚙️ AI Generator is ready. Offline AI model will be connected next.";
-            });
+        referencePreview.innerHTML = `
+            <div style="
+                margin-bottom:8px;
+                color:#ffffff;
+                font-weight:600;
+            ">
+                ✅ ${file.name}
+            </div>
+
+            <img
+                src="${imageURL}"
+                alt="Reference Preview"
+                style="
+                    max-width:180px;
+                    max-height:180px;
+                    border-radius:12px;
+                    object-fit:cover;
+                    border:1px solid rgba(120,150,255,.4);
+                "
+            >
+        `;
     });
 }
+       /* =========================
+   CLOUDflare AI IMAGE GENERATION
+========================= */
+
+async function resizeImageForAI(file, maxSize = 512) {
+
+    const bitmap = await createImageBitmap(file);
+
+    let width = bitmap.width;
+    let height = bitmap.height;
+
+    if (width > height) {
+        if (width > maxSize) {
+            height = Math.round(height * maxSize / width);
+            width = maxSize;
+        }
+    } else {
+        if (height > maxSize) {
+            width = Math.round(width * maxSize / height);
+            height = maxSize;
+        }
+    }
+
+    const canvas = document.createElement("canvas");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+        bitmap,
+        0,
+        0,
+        width,
+        height
+    );
+
+    return new Promise((resolve, reject) => {
+
+        canvas.toBlob(
+            blob => {
+                if (blob) {
+                    resolve(blob);
+                } else {
+                    reject(
+                        new Error("Image resize failed.")
+                    );
+                }
+            },
+            "image/png"
+        );
+
+    });
+}
+
+
+document.getElementById("startAIGeneration")
+    .addEventListener("click", async function () {
+
+        const image =
+            document.getElementById("aiReferenceImage")
+                .files[0];
+
+        const prompt =
+            document.getElementById("aiImagePrompt")
+                .value
+                .trim();
+
+        const status =
+            document.getElementById("aiGenerationStatus");
+
+
+        /* IMAGE CHECK */
+
+        if (!image) {
+
+            status.textContent =
+                "📷 Please choose your reference image.";
+
+            return;
+        }
+
+
+        /* PROMPT CHECK */
+
+        if (!prompt) {
+
+            status.textContent =
+                "✍️ Please enter an image prompt.";
+
+            return;
+        }
+
+
+        /* LOADING */
+
+        status.textContent =
+            "🎨 Generating your image... Please wait.";
+
+
+        try {
+
+            /* Resize reference image */
+
+            const resizedImage =
+                await resizeImageForAI(
+                    image,
+                    512
+                );
+
+
+            /* Create request */
+
+            const formData =
+                new FormData();
+
+            formData.append(
+                "prompt",
+                prompt
+            );
+
+            formData.append(
+                "referenceImage",
+                resizedImage,
+                "reference.png"
+            );
+
+
+            /* Send to Cloudflare Worker */
+
+            const response =
+                await fetch(
+                    "https://momin-ai-generator.mhmomin004522.workers.dev",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            /* Error check */
+
+            if (!response.ok) {
+
+                let errorMessage =
+                    "Image generation failed.";
+
+                try {
+
+                    const errorData =
+                        await response.json();
+
+                    if (errorData.message) {
+                        errorMessage =
+                            errorData.message;
+                    }
+
+                } catch (e) {}
+
+                throw new Error(
+                    errorMessage
+                );
+            }
+
+
+            /* Get generated image */
+
+            const imageBlob =
+                await response.blob();
+
+
+            const imageURL =
+                URL.createObjectURL(
+                    imageBlob
+                );
+
+
+            /* Result container */
+
+            let resultBox =
+                document.getElementById(
+                    "aiGeneratedResult"
+                );
+
+
+            if (!resultBox) {
+
+                resultBox =
+                    document.createElement(
+                        "div"
+                    );
+
+                resultBox.id =
+                    "aiGeneratedResult";
+
+                resultBox.style.cssText = `
+                    margin-top:24px;
+                    padding:18px;
+                    border-radius:16px;
+                    background:#0b1220;
+                    border:1px solid rgba(120,150,255,.25);
+                    text-align:center;
+                `;
+
+                status.parentNode.appendChild(
+                    resultBox
+                );
+            }
+
+
+            /* Show result */
+
+            resultBox.innerHTML = `
+
+                <div style="
+                    color:#ffffff;
+                    font-size:16px;
+                    font-weight:700;
+                    margin-bottom:14px;
+                ">
+                    ✨ Your AI Image
+                </div>
+
+                <img
+                    src="${imageURL}"
+                    alt="Generated AI Image"
+                    style="
+                        width:100%;
+                        max-width:512px;
+                        border-radius:14px;
+                        display:block;
+                        margin:0 auto 16px;
+                    "
+                >
+
+                <a
+                    href="${imageURL}"
+                    download="momin-ai-generated.png"
+                    style="
+                        display:inline-block;
+                        padding:12px 22px;
+                        border-radius:12px;
+                        background:linear-gradient(
+                            135deg,
+                            #7c5cff,
+                            #20b8e8
+                        );
+                        color:#ffffff;
+                        text-decoration:none;
+                        font-weight:700;
+                    "
+                >
+                    ⬇️ Download Image
+                </a>
+            `;
+
+
+            status.textContent =
+                "✅ Image generated successfully!";
+
+
+        } catch (error) {
+
+            console.error(
+                "AI Generation Error:",
+                error
+            );
+
+            status.textContent =
+                "❌ " +
+                (error.message ||
+                 "Image generation failed.");
+        }
+
+    });
+
 /* =========================
    CLEANER BUTTON
 ========================= */
