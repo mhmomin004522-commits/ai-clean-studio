@@ -5446,226 +5446,152 @@ async function resizeImageForAI(file, maxSize = 512) {
 }
 
 
-document.getElementById("startAIGeneration")
-    .addEventListener("click", async function () {
+/* =========================
+   AI GENERATOR BUTTON FIX
+========================= */
 
-        const image =
-            document.getElementById("aiReferenceImage")
-                .files[0];
+document.addEventListener("click", function (e) {
 
-        const prompt =
-            document.getElementById("aiImagePrompt")
-                .value
-                .trim();
+    if (e.target.closest("#aiGeneratorBtn")) {
 
-        const status =
-            document.getElementById("aiGenerationStatus");
+        let panel = document.getElementById("aiGeneratorPanel");
 
-
-        /* IMAGE CHECK */
-
-        if (!image) {
-
-            status.textContent =
-                "📷 Please choose your reference image.";
-
+        if (panel) {
+            panel.style.display =
+                panel.style.display === "none"
+                    ? "block"
+                    : "none";
             return;
         }
 
+        panel = document.createElement("div");
 
-        /* PROMPT CHECK */
+        panel.id = "aiGeneratorPanel";
 
-        if (!prompt) {
+        panel.style.cssText = `
+            margin:20px auto;
+            padding:22px;
+            max-width:600px;
+            border-radius:18px;
+            background:#101827;
+            border:1px solid rgba(120,150,255,.3);
+        `;
 
-            status.textContent =
-                "✍️ Please enter an image prompt.";
+        panel.innerHTML = `
+            <h2 style="color:white;text-align:center;">
+                🎨 AI Image Generator
+            </h2>
 
-            return;
-        }
+            <p style="color:#9ca9bd;text-align:center;">
+                Create images using your photo and prompt
+            </p>
 
+            <input
+                id="aiReferenceImage"
+                type="file"
+                accept="image/*"
+                style="display:none;"
+            >
 
-        /* LOADING */
-
-        status.textContent =
-            "🎨 Generating your image... Please wait.";
-
-
-        try {
-
-            /* Resize reference image */
-
-            const resizedImage =
-                await resizeImageForAI(
-                    image,
-                    512
-                );
-
-
-            /* Create request */
-
-            const formData =
-                new FormData();
-
-            formData.append(
-                "prompt",
-                prompt
-            );
-
-            formData.append(
-                "referenceImage",
-                resizedImage,
-                "reference.png"
-            );
-
-
-            /* Send to Cloudflare Worker */
-
-            const response =
-                await fetch(
-                    "https://momin-ai-generator.mhmomin004522.workers.dev",
-                    {
-                        method: "POST",
-                        body: formData
-                    }
-                );
-
-
-            /* Error check */
-
-            if (!response.ok) {
-
-                let errorMessage =
-                    "Image generation failed.";
-
-                try {
-
-                    const errorData =
-                        await response.json();
-
-                    if (errorData.message) {
-                        errorMessage =
-                            errorData.message;
-                    }
-
-                } catch (e) {}
-
-                throw new Error(
-                    errorMessage
-                );
-            }
-
-
-            /* Get generated image */
-
-            const imageBlob =
-                await response.blob();
-
-
-            const imageURL =
-                URL.createObjectURL(
-                    imageBlob
-                );
-
-
-            /* Result container */
-
-            let resultBox =
-                document.getElementById(
-                    "aiGeneratedResult"
-                );
-
-
-            if (!resultBox) {
-
-                resultBox =
-                    document.createElement(
-                        "div"
-                    );
-
-                resultBox.id =
-                    "aiGeneratedResult";
-
-                resultBox.style.cssText = `
-                    margin-top:24px;
-                    padding:18px;
-                    border-radius:16px;
-                    background:#0b1220;
-                    border:1px solid rgba(120,150,255,.25);
+            <label
+                for="aiReferenceImage"
+                style="
+                    display:block;
+                    padding:15px;
                     text-align:center;
-                `;
+                    border:1px dashed #6675ff;
+                    border-radius:12px;
+                    color:white;
+                    cursor:pointer;
+                "
+            >
+                📷 Choose Your Reference Image
+            </label>
 
-                status.parentNode.appendChild(
-                    resultBox
-                );
-            }
+            <div
+                id="referencePreview"
+                style="
+                    margin-top:12px;
+                    text-align:center;
+                    color:#9ca9bd;
+                "
+            >
+                No image selected
+            </div>
 
+            <textarea
+                id="aiImagePrompt"
+                placeholder="Describe the image you want..."
+                style="
+                    width:100%;
+                    min-height:120px;
+                    margin-top:18px;
+                    padding:14px;
+                    box-sizing:border-box;
+                    border-radius:12px;
+                    background:#0b1220;
+                    color:white;
+                    border:1px solid #334155;
+                "
+            ></textarea>
 
-            /* Show result */
-
-            resultBox.innerHTML = `
-
-                <div style="
-                    color:#ffffff;
-                    font-size:16px;
+            <button
+                id="newGenerateBtn"
+                type="button"
+                style="
+                    width:100%;
+                    margin-top:15px;
+                    padding:15px;
+                    border:0;
+                    border-radius:12px;
+                    color:white;
                     font-weight:700;
-                    margin-bottom:14px;
-                ">
-                    ✨ Your AI Image
-                </div>
+                    background:linear-gradient(135deg,#20b8e8,#5b5ff5);
+                    cursor:pointer;
+                "
+            >
+                ✨ Generate Image
+            </button>
 
-                <img
-                    src="${imageURL}"
-                    alt="Generated AI Image"
-                    style="
-                        width:100%;
-                        max-width:512px;
-                        border-radius:14px;
-                        display:block;
-                        margin:0 auto 16px;
-                    "
-                >
+            <div
+                id="aiGenerationStatus"
+                style="
+                    margin-top:14px;
+                    text-align:center;
+                    color:#9ca9bd;
+                "
+            ></div>
+        `;
 
-                <a
-                    href="${imageURL}"
-                    download="momin-ai-generated.png"
-                    style="
-                        display:inline-block;
-                        padding:12px 22px;
-                        border-radius:12px;
-                        background:linear-gradient(
-                            135deg,
-                            #7c5cff,
-                            #20b8e8
-                        );
-                        color:#ffffff;
-                        text-decoration:none;
-                        font-weight:700;
-                    "
-                >
-                    ⬇️ Download Image
-                </a>
-            `;
+        e.target.closest("#aiGeneratorBtn")
+            .parentElement
+            .insertAdjacentElement("afterend", panel);
 
+        document
+            .getElementById("aiReferenceImage")
+            .addEventListener("change", function () {
 
-            status.textContent =
-                "✅ Image generated successfully!";
+                const file = this.files[0];
 
+                if (!file) return;
 
-        } catch (error) {
+                document
+                    .getElementById("referencePreview")
+                    .innerHTML = `
+                        ✅ ${file.name}<br><br>
+                        <img
+                            src="${URL.createObjectURL(file)}"
+                            style="
+                                max-width:180px;
+                                max-height:180px;
+                                border-radius:12px;
+                            "
+                        >
+                    `;
+            });
+    }
 
-            console.error(
-                "AI Generation Error:",
-                error
-            );
-
-            status.textContent =
-                "❌ " +
-                (error.message ||
-                 "Image generation failed.");
-        }
-
-    });
-
+});
 /* =========================
    CLEANER BUTTON
 ========================= */
