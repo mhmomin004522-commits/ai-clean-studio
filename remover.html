@@ -1168,7 +1168,8 @@ footer{
 <style>
 /* Separate Content Remover page */
 .ai-generator-entry{display:none!important;}
-.cleaner-entry{display:none!important;}
+.cleaner-entry{display:flex!important;}
+#cleanerCard{display:block!important;}
 .page-back{display:block;width:max-content;margin:0 auto 16px;padding:10px 18px;border-radius:12px;background:#18243a;color:#fff;text-decoration:none;border:1px solid #334563;font-weight:700;}
 </style>
 
@@ -5774,6 +5775,11 @@ if (cleanerBtn && cleanerCard) {
         }
     );
 
+}
+
+// Automatically show the Content Remover card on this standalone page.
+if (typeof cleanerCard !== "undefined" && cleanerCard) {
+    cleanerCard.style.display = "block";
 }
 </script>
 
