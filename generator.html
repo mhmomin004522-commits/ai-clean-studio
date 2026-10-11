@@ -5375,6 +5375,33 @@ if (aiGeneratorBtn) {
                         ✨ Image Prompt
                     </label>
 
+<div style="margin:12px 0;">
+  <label for="readyPromptCategory" style="display:block;margin-bottom:8px;color:white;font-weight:700;">
+    ✨ Ready Prompts
+  </label>
+  <select id="readyPromptCategory"
+    style="width:100%;padding:12px;border-radius:10px;background:#0b1220;color:white;margin-bottom:8px;">
+    <option value="">Choose a category</option>
+    <option value="portrait">Realistic Portrait</option>
+    <option value="cinematic">Cinematic</option>
+    <option value="fashion">Fashion</option>
+    <option value="wedding">Wedding</option>
+    <option value="nature">Nature</option>
+    <option value="village">Bangladesh Village</option>
+    <option value="product">Product Ads</option>
+    <option value="animal">Animals</option>
+    <option value="3d">Pixar / 3D</option>
+  </select>
+  <select id="readyPromptSelect"
+    style="width:100%;padding:12px;border-radius:10px;background:#0b1220;color:white;margin-bottom:8px;">
+    <option value="">Choose a prompt</option>
+  </select>
+  <button type="button" id="useReadyPrompt"
+    style="width:100%;padding:12px;border:0;border-radius:10px;background:#20b8a8;color:white;font-weight:700;cursor:pointer;">
+    Use Selected Prompt
+  </button>
+</div>
+
                     <textarea
                         id="aiImagePrompt"
                         placeholder="Describe the image you want to create..."
@@ -5779,6 +5806,68 @@ if (cleanerBtn && cleanerCard) {
 if (typeof aiGeneratorBtn !== "undefined" && aiGeneratorBtn) {
     aiGeneratorBtn.click();
 }
+ 
+const readyPromptData = {
+  portrait: [
+    "Ultra-realistic cinematic portrait, preserve the reference person's recognizable facial identity, natural skin texture, detailed eyes, professional DSLR photography, soft natural lighting, shallow depth of field.",
+    "Photorealistic outdoor portrait, natural expression, realistic hair and beard details, 85mm lens, creamy bokeh, high detail."
+  ],
+  cinematic: [
+    "Ultra-realistic cinematic scene, dramatic lighting, Hollywood color grading, atmospheric depth, realistic textures, professional film composition.",
+    "Moody cinematic portrait, soft rim lighting, deep shadows, subtle bokeh, natural skin texture, film still quality."
+  ],
+  fashion: [
+    "High-end fashion editorial photograph, stylish modern outfit, confident pose, premium studio lighting, realistic fabric details, photorealistic."
+  ],
+  wedding: [
+    "Elegant wedding portrait, romantic soft lighting, beautiful natural colors, realistic clothing embroidery, cinematic photography."
+  ],
+  nature: [
+    "Photorealistic nature scene, lush greenery, soft morning sunlight, natural colors, atmospheric depth, detailed textures."
+  ],
+  village: [
+    "Realistic Bangladeshi village scene, green fields, rural pathways, natural daylight, authentic local environment, cinematic photography."
+  ],
+  product: [
+    "Premium commercial product advertisement, clean composition, dramatic studio lighting, realistic materials, luxury brand photography."
+  ],
+  animal: [
+    "Photorealistic animal portrait, detailed fur and eyes, natural environment, soft cinematic lighting, sharp subject, realistic photography."
+  ],
+  "3d": [
+    "High-quality stylized 3D animated scene, expressive characters, detailed environment, cinematic lighting, vibrant colors, polished render."
+  ]
+};
+
+const readyCategory = document.getElementById("readyPromptCategory");
+const readySelect = document.getElementById("readyPromptSelect");
+const useReadyBtn = document.getElementById("useReadyPrompt");
+const promptBox = document.getElementById("aiImagePrompt");
+
+if (readyCategory && readySelect && useReadyBtn && promptBox) {
+  readyCategory.addEventListener("change", function () {
+    readySelect.innerHTML = '<option value="">Choose a prompt</option>';
+
+    (readyPromptData[this.value] || []).forEach(function (prompt, index) {
+      const option = document.createElement("option");
+      option.value = prompt;
+      option.textContent = "Prompt " + (index + 1);
+      readySelect.appendChild(option);
+    });
+  });
+
+  useReadyBtn.addEventListener("click", function () {
+    if (!readySelect.value) {
+      alert("Please choose a category and prompt first.");
+      return;
+    }
+
+    promptBox.value = readySelect.value;
+    promptBox.dispatchEvent(new Event("input", { bubbles: true }));
+    promptBox.focus();
+  });
+}
+  
 </script>
 
 </body>
