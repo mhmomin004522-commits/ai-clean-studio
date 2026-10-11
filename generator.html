@@ -5399,6 +5399,7 @@ if (aiGeneratorBtn) {
     <option value="">Choose a prompt</option>
   </select>
   <div id="readyPromptGallery" aria-live="polite" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:4px 0 12px;"></div>
+  <div style="color:#71839e;font-size:11px;line-height:1.45;margin:0 0 10px;">Preview thumbnails are examples of each style; generated results can differ. Internet connection is needed to load preview photos.</div>
   <div id="readyPromptHint" style="color:#91a0b8;font-size:12px;line-height:1.5;margin-bottom:10px;">Choose a category to see image previews and prompt styles.</div>
   <button type="button" id="useReadyPrompt" style="width:100%;padding:13px;border:0;border-radius:10px;background:linear-gradient(135deg,#20b8a8,#168eaa);color:white;font-weight:800;cursor:pointer;">Use Selected Prompt</button>
 </div>
@@ -5981,8 +5982,15 @@ function renderReadyPromptGallery(categoryKey) {
     card.setAttribute('aria-label', 'Select prompt: ' + item.title);
     card.style.cssText = 'min-width:0;overflow:hidden;text-align:left;padding:0;border:1px solid rgba(120,150,255,.22);border-radius:12px;background:#0b1220;color:#fff;cursor:pointer;transition:border-color .15s,transform .15s;';
     const img = document.createElement('img');
-    img.src = category.image;
-    img.alt = category.label + ' style preview';
+    const previewTags = (item.imageQuery || item.title || category.label)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ',')
+      .replace(/^,|,$/g, '');
+    const categoryOffset = Object.keys(readyPromptData).indexOf(categoryKey) * 100;
+    img.src = 'https://loremflickr.com/640/480/' +
+      encodeURIComponent(previewTags) +
+      '?lock=' + (categoryOffset + index + 1);
+    img.alt = item.title + ' preview';
     img.loading = 'lazy';
     img.style.cssText = 'display:block;width:100%;height:108px;object-fit:cover;background:#17243a;';
     const fallback = document.createElement('div');
